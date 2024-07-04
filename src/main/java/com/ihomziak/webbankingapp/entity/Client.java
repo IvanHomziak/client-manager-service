@@ -1,16 +1,12 @@
 package com.ihomziak.webbankingapp.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "client")
@@ -49,4 +45,8 @@ public class Client {
 
     @Column(name = "created_at")
     private Timestamp created_at;
+
+    @NotNull
+    @OneToMany(mappedBy = "client")
+    private List<Account> account;
 }
