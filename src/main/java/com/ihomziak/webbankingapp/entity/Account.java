@@ -1,5 +1,6 @@
 package com.ihomziak.webbankingapp.entity;
 
+import com.ihomziak.webbankingapp.enums.AccountType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -18,14 +19,21 @@ public class Account {
     @Column(name = "account_id")
     private long accountId;
 
-    @Column(name = "created_date")
-    private Timestamp createdDate;
+    @Column(name = "account_number")
+    private long accountNumber;
+
+//    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type")
+    private AccountType accountType;
+
+    @Column(name = "balance")
+    private Float balance;
+
+    @Column(name = "created_at")
+    private Timestamp createdAt;
 
     @Column(name = "last_update")
     private Timestamp lastUpdate;
-
-    @Column(name = "account_number")
-    private Long accountNumber;
 
     @NotNull
     @ManyToOne
