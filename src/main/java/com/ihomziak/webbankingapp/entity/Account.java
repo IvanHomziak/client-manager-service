@@ -22,7 +22,7 @@ public class Account {
     @Column(name = "account_number")
     private long accountNumber;
 
-//    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
     private AccountType accountType;
 

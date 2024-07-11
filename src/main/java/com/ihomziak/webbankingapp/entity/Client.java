@@ -44,9 +44,9 @@ public class Client {
     private String address;
 
     @Column(name = "created_at")
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
-    @NotNull
+//    @NotNull
     @OneToMany(mappedBy = "client")
     private List<Account> account;
 }

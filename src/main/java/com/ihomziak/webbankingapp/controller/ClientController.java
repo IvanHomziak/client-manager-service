@@ -1,6 +1,6 @@
 package com.ihomziak.webbankingapp.controller;
 
-import com.ihomziak.webbankingapp.dto.ClientDTO;
+import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
 import com.ihomziak.webbankingapp.entity.Client;
 import com.ihomziak.webbankingapp.service.ClientService;
 import com.ihomziak.webbankingapp.util.ClientException;
@@ -80,12 +80,11 @@ public class ClientController {
         }
     }
 
-    private Client convertToClient(ClientDTO clientDTO) {
-        clientDTO.setClientId(0);
-        return this.modelMapper.map(clientDTO, Client.class);
+    private Client convertToClient(ClientResponseDTO clientResponseDTO) {
+        return this.modelMapper.map(clientResponseDTO, Client.class);
     }
 
-    private ClientDTO convertToClientDTO(Client client) {
-        return this.modelMapper.map(client, ClientDTO.class);
+    private ClientResponseDTO convertToClientDTO(Client client) {
+        return this.modelMapper.map(client, ClientResponseDTO.class);
     }
 }
