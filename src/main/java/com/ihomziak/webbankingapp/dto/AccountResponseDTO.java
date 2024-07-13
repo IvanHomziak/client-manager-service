@@ -13,7 +13,7 @@ public class AccountResponseDTO {
     private int accountId;
     private String accountNumber;
     private AccountType accountType;
-    private long balance;
+    private double balance;
     private Timestamp createdAt;
     private Timestamp lastUpdated;
     private AccountHolderDTO accountHolderDTO;

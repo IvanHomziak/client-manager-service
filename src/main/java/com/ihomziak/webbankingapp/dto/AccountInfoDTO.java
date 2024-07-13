@@ -10,6 +10,6 @@ public class AccountInfoDTO {
 
     private String accountNumber;
     private AccountType accountType;
-    private long balance;
+    private double balance;
     private String UUID;
 }
