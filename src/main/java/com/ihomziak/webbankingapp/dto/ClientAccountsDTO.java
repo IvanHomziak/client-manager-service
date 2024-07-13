@@ -11,6 +11,6 @@ public class ClientAccountsDTO {
 
     private String firstName;
     private String lastName;
-    private String  uuID;
+    private String uuID;
     private List<AccountInfoDTO> list;
 }
