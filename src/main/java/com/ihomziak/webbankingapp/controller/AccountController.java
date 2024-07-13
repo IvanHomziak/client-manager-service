@@ -21,14 +21,9 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("/account")
-    public List<Account> getAccounts() {
-        return this.accountService.findAll();
-    }
-
     @PostMapping("/account")
     public ResponseEntity<HttpStatus> addAccount(@RequestBody @Valid Account account) {
-        account.setAccountId(0);
+//        account.setAccountId(0);
 
         try {
             if (this.accountService.findAccountByNumber(account.getAccountNumber()).isPresent()) {
