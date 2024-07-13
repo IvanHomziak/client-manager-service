@@ -4,6 +4,7 @@ import lombok.Setter;
 import lombok.Getter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -17,7 +18,7 @@ public class ClientResponseDTO {
     private String email;
     private String phoneNumber;
     private String address;
-    private Timestamp createdAt;
-    private Timestamp updateAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
     private String  UUID;
 }

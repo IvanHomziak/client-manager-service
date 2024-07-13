@@ -36,27 +36,27 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void save(ClientRequestDTO client) {
-        Client theClient = mapper.clientRequestDTOToClient(client);
+    public void save(ClientRequestDTO clientRequestDTO) {
+        Client theClient = mapper.clientRequestDTOToClient(clientRequestDTO);
         theClient.setClientId(0);
-        if (this.clientRepository.findClientByTaxNumber(client.getTaxNumber()).isPresent()) {
+        if (this.clientRepository.findClientByTaxNumber(theClient.getTaxNumber()).isPresent()) {
             throw new ClientException("Client already exist");
         } else {
             theClient.setUUID(UUID.randomUUID().toString());
-            this.clientRepository.save(mapper.clientRequestDTOToClient(client));
+            this.clientRepository.save(theClient);
         }
     }
 
     @Override
-    public void deleteById(Long clientId) {
-        Optional<Client> result = this.clientRepository.findById(clientId);
+    public void deleteByUUID(String uuid) {
+        Optional<Client> result = this.clientRepository.findClientByUUID(uuid);
 
         Client theClient;
         if (result.isPresent()) {
             theClient = result.get();
             this.clientRepository.delete(theClient);
         } else {
-            throw new ClientException("Client not exist: " + clientId);
+            throw new ClientException("Client not exist. UUID: " + uuid);
         }
     }
 

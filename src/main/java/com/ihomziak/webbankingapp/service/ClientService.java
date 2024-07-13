@@ -14,7 +14,7 @@ public interface ClientService {
 
     void save(ClientRequestDTO client);
 
-    void deleteById(Long clientId);
+    void deleteByUUID(String uuid);
 
     Client update(Client client);
 

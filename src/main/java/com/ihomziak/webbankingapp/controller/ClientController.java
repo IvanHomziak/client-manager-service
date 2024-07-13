@@ -47,9 +47,9 @@ public class ClientController {
         return this.clientService.findAll();
     }
 
-    @DeleteMapping("/clients/{id}")
-    public ResponseEntity<HttpStatus> deleteClient(@PathVariable Long id) {
-        this.clientService.deleteById(id);
+    @DeleteMapping("/clients/{uuid}")
+    public ResponseEntity<HttpStatus> deleteClient(@PathVariable String uuid) {
+        this.clientService.deleteByUUID(uuid);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
