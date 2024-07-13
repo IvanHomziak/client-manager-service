@@ -31,6 +31,10 @@ public class Client {
     @NotNull
     private String dateOfBirth;
 
+    @Column(name = "tax_number")
+    @NotNull
+    private String taxNumber;
+
     @Column(name = "email")
     @NotNull
     private String email;
@@ -46,7 +50,31 @@ public class Client {
     @Column(name = "created_at")
     private Timestamp createdAt;
 
-//    @NotNull
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
+
+    @Column(name = "uuid")
+    private String UUID;
+
+    @NotNull
     @OneToMany(mappedBy = "client")
     private List<Account> account;
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "clientId=" + clientId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", taxNumber='" + taxNumber + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", UUID='" + UUID + '\'' +
+                ", account=" + account +
+                '}';
+    }
 }
