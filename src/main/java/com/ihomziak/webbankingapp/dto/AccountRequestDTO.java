@@ -11,5 +11,5 @@ public class AccountRequestDTO {
     private String accountNumber;
     private AccountType accountType;
     private long balance;
-    private String UUID;
+    private String clientUUID;
 }
