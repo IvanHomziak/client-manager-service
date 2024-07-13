@@ -1,43 +1,50 @@
 package com.ihomziak.webbankingapp.service;
 
 import com.ihomziak.webbankingapp.dao.ClientRepository;
+import com.ihomziak.webbankingapp.dto.ClientRequestDTO;
+import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
+import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
 import com.ihomziak.webbankingapp.entity.Client;
+import com.ihomziak.webbankingapp.mapper.MapStructMapperImpl;
 import com.ihomziak.webbankingapp.util.ClientException;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final MapStructMapperImpl mapper;
+
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository,
+                             MapStructMapperImpl mapper) {
         this.clientRepository = clientRepository;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<Client> findAll() {
-        return this.clientRepository.findAll();
+    public LinkedList<ClientsInfoDTO> findAll() {
+        List<Client> clients = clientRepository.findAll();
+        return this.mapper.clientsToClientInfoDTO(clients);
     }
 
     @Override
-    public Optional<Client> findById(Long id) {
-        return this.clientRepository.findById(id);
-    }
-
-    @Override
-    public Optional<Client> findClientByEmail(Client client) {
-        return this.clientRepository.findClientByEmail(client.getEmail());
-    }
-
-    @Override
-    public void save(Client client) {
-        this.clientRepository.save(client);
+    public void save(ClientRequestDTO client) {
+        Client theClient = mapper.clientRequestDTOToClient(client);
+        theClient.setClientId(0);
+        if (this.clientRepository.findClientByTaxNumber(client.getTaxNumber()).isPresent()) {
+            throw new ClientException("Client already exist");
+        } else {
+            theClient.setUUID(UUID.randomUUID().toString());
+            this.clientRepository.save(mapper.clientRequestDTOToClient(client));
+        }
     }
 
     @Override
@@ -74,4 +81,11 @@ public class ClientServiceImpl implements ClientService {
 
         return clientRepository.save(newClient);
     }
+
+    @Override
+    public Optional<ClientResponseDTO> findByUUID(String uuid) {
+        Optional<Client> theClient = this.clientRepository.findClientByUUID(uuid);
+        return Optional.ofNullable(this.mapper.clientToClientResponseDTO(theClient));
+    }
+
 }
