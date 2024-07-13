@@ -56,7 +56,6 @@ public class Client {
     @Column(name = "uuid")
     private String UUID;
 
-    @NotNull
     @OneToMany(mappedBy = "client")
     private List<Account> account;
 
