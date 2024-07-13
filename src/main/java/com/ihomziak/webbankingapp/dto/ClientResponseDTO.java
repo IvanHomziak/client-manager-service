@@ -13,10 +13,11 @@ public class ClientResponseDTO {
     private String firstName;
     private String lastName;
     private String dateOfBirth;
+    private String taxNumber;
     private String email;
     private String phoneNumber;
     private String address;
-    private Timestamp created_at;
-    private Timestamp update_at;
+    private Timestamp createdAt;
+    private Timestamp updateAt;
     private String  UUID;
 }
