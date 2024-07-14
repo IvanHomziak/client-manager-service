@@ -12,7 +12,7 @@ public interface AccountService {
 
     List<Account> findAll();
 
-    Optional<Account> findAccountByNumber(long accountNumber);
+    Optional<Account> findAccountByNumber(String accountNumber);
 
     void save(Account account);
 

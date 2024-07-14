@@ -30,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Account> findAccountByNumber(long accountNumber) {
+    public Optional<Account> findAccountByNumber(String accountNumber) {
         return Optional.ofNullable(this.accountRepository.findAccountByAccountNumber(accountNumber));
     }
 
