@@ -20,14 +20,14 @@ public class Account {
     private long accountId;
 
     @Column(name = "account_number")
-    private long accountNumber;
+    private String accountNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
     private AccountType accountType;
 
     @Column(name = "balance")
-    private Float balance;
+    private double balance;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
