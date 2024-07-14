@@ -61,25 +61,22 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client update(Client client) {
-        Optional<Client> theClient = clientRepository.findById(client.getClientId());
+    public void update(ClientRequestDTO clientRequestDTO) {
+        Optional<Client> theClient = clientRepository.findClientByTaxNumber(clientRequestDTO.getTaxNumber());
 
         if (theClient.isEmpty()) {
             throw new ClientException("Client is not exist");
         }
 
-        Client newClient = new Client();
+        Client newClient = theClient.get();
 
-        newClient.setClientId(client.getClientId());
-        newClient.setFirstName(client.getFirstName());
-        newClient.setLastName(client.getLastName());
-        newClient.setDateOfBirth(client.getDateOfBirth());
-        newClient.setPhoneNumber(client.getPhoneNumber());
-        newClient.setEmail(client.getEmail());
-        newClient.setAddress(client.getAddress());
+        newClient.setFirstName(clientRequestDTO.getFirstName());
+        newClient.setLastName(clientRequestDTO.getLastName());
+        newClient.setPhoneNumber(clientRequestDTO.getPhoneNumber());
+        newClient.setEmail(clientRequestDTO.getEmail());
+        newClient.setAddress(clientRequestDTO.getAddress());
 
-
-        return clientRepository.save(newClient);
+        clientRepository.save(newClient);
     }
 
     @Override

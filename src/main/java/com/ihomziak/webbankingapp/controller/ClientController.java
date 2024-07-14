@@ -3,7 +3,6 @@ package com.ihomziak.webbankingapp.controller;
 import com.ihomziak.webbankingapp.dto.ClientRequestDTO;
 import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
 import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
-import com.ihomziak.webbankingapp.entity.Client;
 import com.ihomziak.webbankingapp.service.ClientService;
 import com.ihomziak.webbankingapp.util.ClientException;
 import jakarta.validation.Valid;
@@ -54,21 +53,13 @@ public class ClientController {
     }
 
     @PatchMapping("/clients/update")
-    public ResponseEntity<HttpStatus> updateClient(@RequestBody @Valid Client client) {
+    public ResponseEntity<HttpStatus> updateClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
 
         try {
-            this.clientService.update(client);
+            this.clientService.update(clientRequestDTO);
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (ClientException ex) {
             return ResponseEntity.ofNullable(HttpStatus.NOT_FOUND);
         }
     }
-
-//    private Client convertToClient(ClientResponseDTO clientResponseDTO) {
-//        return this.modelMapper.map(clientResponseDTO, Client.class);
-//    }
-//
-//    private ClientResponseDTO convertToClientDTO(Client client) {
-//        return this.modelMapper.map(client, ClientResponseDTO.class);
-//    }
 }

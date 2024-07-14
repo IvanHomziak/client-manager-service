@@ -3,7 +3,6 @@ package com.ihomziak.webbankingapp.service;
 import com.ihomziak.webbankingapp.dto.ClientRequestDTO;
 import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
 import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
-import com.ihomziak.webbankingapp.entity.Client;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,7 @@ public interface ClientService {
 
     void deleteByUUID(String uuid);
 
-    Client update(Client client);
+    void update(ClientRequestDTO clientRequestDTO);
 
     Optional<ClientResponseDTO> findByUUID(String uuid);
 }
