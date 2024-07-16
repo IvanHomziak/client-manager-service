@@ -7,8 +7,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -1,23 +1,21 @@
 package com.ihomziak.webbankingapp.service;
 
-import com.ihomziak.webbankingapp.entity.Account;
-import com.ihomziak.webbankingapp.entity.Client;
-import com.ihomziak.webbankingapp.enums.AccountType;
+import com.ihomziak.webbankingapp.dto.AccountInfoDTO;
+import com.ihomziak.webbankingapp.dto.AccountRequestDTO;
+import com.ihomziak.webbankingapp.dto.AccountResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AccountService {
 
-    Optional<Account> findById(long id);
+    Optional<AccountInfoDTO> findAccountByUuid(String accountNumber);
 
-    List<Account> findAll();
+    Optional<AccountResponseDTO> createCheckingAccount(AccountRequestDTO account);
 
-    Optional<Account> findAccountByNumber(String accountNumber);
+    Optional<AccountInfoDTO> deleteAccount(String uuid);
 
-    void save(Account account);
+    Optional<AccountResponseDTO> updateAccount(AccountRequestDTO accountRequestDTO);
 
-    void deleteById(long accountId);
-
-    Optional<AccountType> findAccountTypeBy(AccountType accountType);
+    List<Optional<AccountInfoDTO>> findAllAccounts();
 }

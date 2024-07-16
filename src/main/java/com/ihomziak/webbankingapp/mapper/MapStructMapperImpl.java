@@ -1,13 +1,11 @@
 package com.ihomziak.webbankingapp.mapper;
 
-import com.ihomziak.webbankingapp.dto.ClientRequestDTO;
-import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
-import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
+import com.ihomziak.webbankingapp.dto.*;
+import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.entity.Client;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,5 +70,62 @@ public class MapStructMapperImpl implements MapStructMapper {
         }
 
         return clientsInfoDTOList;
+    }
+
+    @Override
+    public AccountResponseDTO accountToAccountResponseDto(Account account) {
+        AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
+        AccountHolderDTO accountHolderDTO = new AccountHolderDTO();
+
+
+        accountHolderDTO.setFirstName(account.getClient().getFirstName());
+        accountHolderDTO.setLastName(account.getClient().getLastName());
+        accountHolderDTO.setUUID(account.getClient().getUUID());
+
+        accountResponseDTO.setAccountId(account.getAccountId());
+        accountResponseDTO.setAccountHolderDTO(accountHolderDTO);
+        accountResponseDTO.setBalance(account.getBalance());
+        accountResponseDTO.setAccountNumber(account.getAccountNumber());
+        accountResponseDTO.setAccountType(account.getAccountType());
+        accountResponseDTO.setUUID(account.getUUID());
+        accountResponseDTO.setCreatedAt(account.getCreatedAt());
+        accountResponseDTO.setLastUpdated(account.getLastUpdate());
+
+        return accountResponseDTO;
+    }
+
+    @Override
+    public AccountHolderDTO clientToAccountHolderDto(Optional<Client> theClient) {
+        AccountHolderDTO accountHolderDTO = new AccountHolderDTO();
+        Client client = theClient.get();
+
+        accountHolderDTO.setFirstName(client.getFirstName());
+        accountHolderDTO.setLastName(client.getLastName());
+        accountHolderDTO.setUUID(client.getUUID());
+
+        return accountHolderDTO;
+    }
+
+    @Override
+    public Account accountRequestDtoToAccount(AccountRequestDTO accountRequestDTO) {
+
+        Account account = new Account();
+
+        account.setAccountNumber(accountRequestDTO.getAccountNumber());
+        account.setAccountType(accountRequestDTO.getAccountType());
+        account.setBalance(accountRequestDTO.getBalance());
+        account.setUUID(accountRequestDTO.getClientUUID());
+
+        return account;
+    }
+
+    @Override
+    public AccountInfoDTO accountToAccountInfoDto(Account accountByUUID) {
+        AccountInfoDTO accountInfoDTO = new AccountInfoDTO();
+        accountInfoDTO.setAccountType(accountByUUID.getAccountType());
+        accountInfoDTO.setAccountNumber(accountByUUID.getAccountNumber());
+        accountInfoDTO.setBalance(accountByUUID.getBalance());
+        accountInfoDTO.setUUID(accountByUUID.getUUID());
+        return accountInfoDTO;
     }
 }

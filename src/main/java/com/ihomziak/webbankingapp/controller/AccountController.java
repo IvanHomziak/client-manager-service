@@ -1,18 +1,16 @@
 package com.ihomziak.webbankingapp.controller;
 
+import com.ihomziak.webbankingapp.dto.AccountInfoDTO;
 import com.ihomziak.webbankingapp.dto.AccountRequestDTO;
 import com.ihomziak.webbankingapp.dto.AccountResponseDTO;
-import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.service.AccountService;
-import com.ihomziak.webbankingapp.util.AccountException;
-import com.ihomziak.webbankingapp.util.ClientException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -24,15 +22,28 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-//    @PostMapping("/account")
-//    public ResponseEntity<AccountResponseDTO> addAccount(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
-//        this.accountService.save(accountRequestDTO);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(accountRequestDTO);
-//    }
+    @GetMapping("/account/{uuid}")
+    public ResponseEntity<Optional<AccountInfoDTO>> getAccount(@PathVariable String uuid) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(this.accountService.findAccountByUuid(uuid));
+    }
 
-    @DeleteMapping("/account/{id}")
-    public ResponseEntity<HttpStatus> deleteClient(@PathVariable long id) {
-        this.accountService.deleteById(id);
-        return ResponseEntity.ok(HttpStatus.OK);
+    @PostMapping("/account")
+    public ResponseEntity<Optional<AccountResponseDTO>> createCheckingAccount(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.accountService.createCheckingAccount(accountRequestDTO));
+    }
+
+    @DeleteMapping("/account/{uuid}")
+    public ResponseEntity<Optional<AccountInfoDTO>> deleteAccount(@PathVariable String uuid) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.accountService.deleteAccount(uuid));
+    }
+
+    @PatchMapping("/account")
+    public ResponseEntity<Optional<AccountResponseDTO>> updateAccount(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.accountService.updateAccount(accountRequestDTO));
+    }
+
+    @GetMapping("/account")
+    public ResponseEntity<List<Optional<AccountInfoDTO>>> getAccount() {
+        return ResponseEntity.status(HttpStatus.FOUND).body(this.accountService.findAllAccounts());
     }
 }

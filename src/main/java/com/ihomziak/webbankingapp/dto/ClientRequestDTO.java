@@ -3,8 +3,6 @@ package com.ihomziak.webbankingapp.dto;
 import lombok.Setter;
 import lombok.Getter;
 
-import java.sql.Timestamp;
-
 @Setter
 @Getter
 public class ClientRequestDTO {

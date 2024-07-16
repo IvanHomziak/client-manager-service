@@ -3,7 +3,6 @@ package com.ihomziak.webbankingapp.dto;
 import lombok.Setter;
 import lombok.Getter;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Setter
