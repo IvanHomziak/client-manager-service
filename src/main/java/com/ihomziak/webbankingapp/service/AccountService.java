@@ -2,6 +2,7 @@ package com.ihomziak.webbankingapp.service;
 
 import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.entity.Client;
+import com.ihomziak.webbankingapp.enums.AccountType;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +18,6 @@ public interface AccountService {
     void save(Account account);
 
     void deleteById(long accountId);
+
+    Optional<AccountType> findAccountTypeBy(AccountType accountType);
 }

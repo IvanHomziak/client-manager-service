@@ -2,6 +2,7 @@ package com.ihomziak.webbankingapp.service;
 
 import com.ihomziak.webbankingapp.dao.AccountRepository;
 import com.ihomziak.webbankingapp.entity.Account;
+import com.ihomziak.webbankingapp.enums.AccountType;
 import com.ihomziak.webbankingapp.util.ClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,4 +52,19 @@ public class AccountServiceImpl implements AccountService {
             throw new ClientException("Account not exist: " + accountId);
         }
     }
+
+    @Override
+    public Optional<AccountType> findAccountTypeBy(AccountType accountType) {
+        return Optional.empty();
+    }
+
+//    @Override
+//    public Optional<AccountType>  findAccountTypeBy(AccountType accountType) {
+//        Optional<AccountType>  theAccountType = this.accountRepository.findAccountByAccountType(accountType);
+//        if (theAccountType.isPresent()) {
+//
+//        }
+//        this.accountRepository.findAccountByAccountType(accountType);
+//        return null;
+//    }
 }

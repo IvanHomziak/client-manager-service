@@ -15,7 +15,7 @@ import java.util.Optional;
 public class MapStructMapperImpl implements MapStructMapper {
 
     @Override
-    public Client clientRequestDTOToClient(ClientRequestDTO clientRequestDTO) {
+    public Client clientRequestDtoToClient(ClientRequestDTO clientRequestDTO) {
 
         if (clientRequestDTO == null) {
             return null;
@@ -35,10 +35,11 @@ public class MapStructMapperImpl implements MapStructMapper {
     }
 
     @Override
-    public ClientResponseDTO clientToClientResponseDTO(Optional<Client> theClient) {
+    public ClientResponseDTO clientToClientResponseDto(Optional<Client> theClient) {
         Client client = theClient.get();
         ClientResponseDTO responseDTO = new ClientResponseDTO();
 
+        responseDTO.setClientId(client.getClientId());
         responseDTO.setFirstName(client.getFirstName());
         responseDTO.setLastName(client.getLastName());
         responseDTO.setTaxNumber(client.getTaxNumber());
@@ -54,10 +55,10 @@ public class MapStructMapperImpl implements MapStructMapper {
     }
 
     @Override
-    public LinkedList<ClientsInfoDTO> clientsToClientInfoDTO(List<Client> clients) {
+    public List<ClientsInfoDTO> clientsToClientInfoDto(List<Client> clients) {
 
         ClientsInfoDTO clientInfoDTO = new ClientsInfoDTO();
-        LinkedList<ClientsInfoDTO> clientsInfoDTOList = new LinkedList<>();
+        List<ClientsInfoDTO> clientsInfoDTOList = new ArrayList<>();
 
         for (int i = 0; i < clients.size(); i++) {
             Client client = clients.get(i);

@@ -11,10 +11,10 @@ import java.util.Optional;
 
 public interface MapStructMapper {
 
-    Client clientRequestDTOToClient(ClientRequestDTO clientRequestDTO);
+    Client clientRequestDtoToClient(ClientRequestDTO clientRequestDTO);
 
-    ClientResponseDTO clientToClientResponseDTO(Optional<Client> theClient);
+    ClientResponseDTO clientToClientResponseDto(Optional<Client> theClient);
 
-    LinkedList<ClientsInfoDTO> clientsToClientInfoDTO(List<Client> clients);
+    List<ClientsInfoDTO> clientsToClientInfoDto(List<Client> clients);
 }
 

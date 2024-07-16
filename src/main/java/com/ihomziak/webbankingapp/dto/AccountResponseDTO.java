@@ -1,6 +1,7 @@
 package com.ihomziak.webbankingapp.dto;
 
 import com.ihomziak.webbankingapp.enums.AccountType;
+import jakarta.persistence.Column;
 import lombok.Setter;
 import lombok.Getter;
 
@@ -17,4 +18,5 @@ public class AccountResponseDTO {
     private Timestamp createdAt;
     private Timestamp lastUpdated;
     private AccountHolderDTO accountHolderDTO;
+    private String UUID;
 }

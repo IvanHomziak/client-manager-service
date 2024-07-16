@@ -1,5 +1,6 @@
 package com.ihomziak.webbankingapp.controller;
 
+import com.ihomziak.webbankingapp.dto.ClientAccountsDTO;
 import com.ihomziak.webbankingapp.dto.ClientRequestDTO;
 import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
 import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
@@ -27,23 +28,18 @@ public class ClientController {
     }
 
     @PostMapping("/clients")
-    public ResponseEntity<HttpStatus> addClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
-        try {
-            this.clientService.save(clientRequestDTO);
-            return ResponseEntity.ok(HttpStatus.OK);
-        } catch (ClientException ex) {
-            return ResponseEntity.ofNullable(HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<Optional<ClientResponseDTO>> addClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.clientService.save(clientRequestDTO));
     }
 
     @GetMapping("/clients/{uuid}")
-    public Optional<ClientResponseDTO> getClient(@PathVariable String uuid) {
-        return this.clientService.findByUUID(uuid);
+    public ResponseEntity<Optional<ClientResponseDTO>> getClient(@PathVariable String uuid) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(this.clientService.findByUUID(uuid));
     }
 
     @GetMapping("/clients")
-    public List<ClientsInfoDTO> getClients() {
-        return this.clientService.findAll();
+    public ResponseEntity<Optional<List<ClientsInfoDTO>>> getClients() {
+        return ResponseEntity.status(HttpStatus.FOUND).body(this.clientService.findAll());
     }
 
     @DeleteMapping("/clients/{uuid}")

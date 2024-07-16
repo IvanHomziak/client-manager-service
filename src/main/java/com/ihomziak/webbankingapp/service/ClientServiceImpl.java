@@ -4,16 +4,15 @@ import com.ihomziak.webbankingapp.dao.ClientRepository;
 import com.ihomziak.webbankingapp.dto.ClientRequestDTO;
 import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
 import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
+import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.entity.Client;
+import com.ihomziak.webbankingapp.enums.AccountType;
 import com.ihomziak.webbankingapp.mapper.MapStructMapperImpl;
 import com.ihomziak.webbankingapp.util.ClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -30,21 +29,32 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public LinkedList<ClientsInfoDTO> findAll() {
+    public Optional<List<ClientsInfoDTO>> findAll() {
         List<Client> clients = clientRepository.findAll();
-        return this.mapper.clientsToClientInfoDTO(clients);
+        return Optional.ofNullable(this.mapper.clientsToClientInfoDto(clients));
     }
 
     @Override
-    public void save(ClientRequestDTO clientRequestDTO) {
-        Client theClient = mapper.clientRequestDTOToClient(clientRequestDTO);
-        theClient.setClientId(0);
-        if (this.clientRepository.findClientByTaxNumber(theClient.getTaxNumber()).isPresent()) {
+    public Optional<ClientResponseDTO> save(ClientRequestDTO clientRequestDTO) {
+        if (this.clientRepository.findClientByTaxNumber(clientRequestDTO.getTaxNumber()).isPresent()) {
             throw new ClientException("Client already exist");
-        } else {
-            theClient.setUUID(UUID.randomUUID().toString());
-            this.clientRepository.save(theClient);
         }
+
+        Client theClient = mapper.clientRequestDtoToClient(clientRequestDTO);
+
+        theClient.setUUID(UUID.randomUUID().toString());
+
+        Account account = new Account();
+        account.setAccountType(AccountType.CHECKING);
+        account.setClient(theClient);
+
+        List<Account> accounts = Collections.singletonList(account);
+        theClient.setAccount(accounts);
+
+        this.clientRepository.save(theClient);
+
+        Optional<Client> client = Optional.of(theClient);
+        return Optional.of(mapper.clientToClientResponseDto(client));
     }
 
     @Override
@@ -81,8 +91,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Optional<ClientResponseDTO> findByUUID(String uuid) {
+        if (this.clientRepository.findClientByUUID(uuid).isEmpty()) {
+            throw new ClientException("Client not exist. UUID: " + uuid);
+        }
+
         Optional<Client> theClient = this.clientRepository.findClientByUUID(uuid);
-        return Optional.ofNullable(this.mapper.clientToClientResponseDTO(theClient));
+        return Optional.ofNullable(this.mapper.clientToClientResponseDto(theClient));
     }
 
 }

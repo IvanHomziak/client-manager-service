@@ -35,6 +35,9 @@ public class Account {
     @Column(name = "last_update")
     private Timestamp lastUpdate;
 
+    @Column(name = "uuid")
+    private String UUID;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)

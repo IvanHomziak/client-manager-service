@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface ClientService {
 
-    List<ClientsInfoDTO> findAll();
+    Optional<List<ClientsInfoDTO>> findAll();
 
-    void save(ClientRequestDTO client);
+    Optional<ClientResponseDTO> save(ClientRequestDTO client);
 
     void deleteByUUID(String uuid);
 
