@@ -15,6 +15,7 @@ import com.ihomziak.webbankingapp.util.ClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +49,7 @@ public class AccountServiceImpl implements AccountService {
             theAccount.setAccountNumber(AccountNumberGenerator.generateBankAccountNumber());
         }
         theAccount.setClient(client.get());
+        theAccount.setCreatedAt(LocalDateTime.now());
 
         this.accountRepository.save(theAccount);
 
@@ -72,9 +74,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Optional<AccountResponseDTO> updateAccount(AccountRequestDTO accountRequestDTO) {
-        Optional<Account> account = this.accountRepository.findAccountByUUID(accountRequestDTO.getClientUUID());
+        Optional<Account> account = this.accountRepository.findAccountByAccountNumber(accountRequestDTO.getAccountNumber());
         if (account.isEmpty()) {
-            throw new AccountException("Account not exist: " + accountRequestDTO.getClientUUID());
+            throw new AccountException("Account number " + accountRequestDTO.getAccountNumber() + " not exist: " + accountRequestDTO.getClientUUID());
         }
 
         Account theAccount = mapper.accountRequestDtoToAccount(accountRequestDTO);
@@ -83,6 +85,7 @@ public class AccountServiceImpl implements AccountService {
             throw new ClientException("Client not found");
         }
         theAccount.setClient(theClient.get());
+        theAccount.setLastUpdate(LocalDateTime.now());
         this.accountRepository.save(theAccount);
         return Optional.of(mapper.accountToAccountResponseDto(theAccount));
     }
