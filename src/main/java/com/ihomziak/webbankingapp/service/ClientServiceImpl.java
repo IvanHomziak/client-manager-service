@@ -58,20 +58,20 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void deleteByUUID(String uuid) {
-        Optional<Client> result = this.clientRepository.findClientByUUID(uuid);
+    public Optional<ClientResponseDTO> deleteByUUID(String uuid) {
+        Optional<Client> client = this.clientRepository.findClientByUUID(uuid);
 
-        Client theClient;
-        if (result.isPresent()) {
-            theClient = result.get();
-            this.clientRepository.delete(theClient);
-        } else {
-            throw new ClientException("Client not exist. UUID: " + uuid);
+        if (client.isEmpty()) {
+            throw new ClientException("Client does not exist");
         }
+
+        this.clientRepository.delete(client.get());
+
+        return Optional.of(mapper.clientToClientResponseDto(client));
     }
 
     @Override
-    public void update(ClientRequestDTO clientRequestDTO) {
+    public Optional<ClientResponseDTO> update(ClientRequestDTO clientRequestDTO) {
         Optional<Client> theClient = clientRepository.findClientByTaxNumber(clientRequestDTO.getTaxNumber());
 
         if (theClient.isEmpty()) {
@@ -87,10 +87,12 @@ public class ClientServiceImpl implements ClientService {
         newClient.setAddress(clientRequestDTO.getAddress());
 
         clientRepository.save(newClient);
+
+        return Optional.ofNullable(mapper.clientToClientResponseDto(theClient));
     }
 
     @Override
-    public Optional<ClientResponseDTO> findByUUID(String uuid) {
+    public Optional<ClientResponseDTO> findClientByUUID(String uuid) {
         if (this.clientRepository.findClientByUUID(uuid).isEmpty()) {
             throw new ClientException("Client not exist. UUID: " + uuid);
         }
@@ -98,5 +100,4 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> theClient = this.clientRepository.findClientByUUID(uuid);
         return Optional.ofNullable(this.mapper.clientToClientResponseDto(theClient));
     }
-
 }

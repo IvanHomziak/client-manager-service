@@ -13,9 +13,9 @@ public interface ClientService {
 
     Optional<ClientResponseDTO> save(ClientRequestDTO client);
 
-    void deleteByUUID(String uuid);
+    Optional<ClientResponseDTO> deleteByUUID(String uuid);
 
-    void update(ClientRequestDTO clientRequestDTO);
+    Optional<ClientResponseDTO> update(ClientRequestDTO clientRequestDTO);
 
-    Optional<ClientResponseDTO> findByUUID(String uuid);
+    Optional<ClientResponseDTO> findClientByUUID(String uuid);
 }

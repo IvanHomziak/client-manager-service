@@ -1,11 +1,9 @@
 package com.ihomziak.webbankingapp.controller;
 
-import com.ihomziak.webbankingapp.dto.ClientAccountsDTO;
 import com.ihomziak.webbankingapp.dto.ClientRequestDTO;
 import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
 import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
 import com.ihomziak.webbankingapp.service.ClientService;
-import com.ihomziak.webbankingapp.util.ClientException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +32,7 @@ public class ClientController {
 
     @GetMapping("/clients/{uuid}")
     public ResponseEntity<Optional<ClientResponseDTO>> getClient(@PathVariable String uuid) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(this.clientService.findByUUID(uuid));
+        return ResponseEntity.status(HttpStatus.FOUND).body(this.clientService.findClientByUUID(uuid));
     }
 
     @GetMapping("/clients")
@@ -43,19 +41,12 @@ public class ClientController {
     }
 
     @DeleteMapping("/clients/{uuid}")
-    public ResponseEntity<HttpStatus> deleteClient(@PathVariable String uuid) {
-        this.clientService.deleteByUUID(uuid);
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<Optional<ClientResponseDTO>> deleteClient(@PathVariable String uuid) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.clientService.deleteByUUID(uuid));
     }
 
     @PatchMapping("/clients/update")
-    public ResponseEntity<HttpStatus> updateClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
-
-        try {
-            this.clientService.update(clientRequestDTO);
-            return ResponseEntity.ok(HttpStatus.OK);
-        } catch (ClientException ex) {
-            return ResponseEntity.ofNullable(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Optional<ClientResponseDTO>> updateClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.clientService.update(clientRequestDTO));
     }
 }
