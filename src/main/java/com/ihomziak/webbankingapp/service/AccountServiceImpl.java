@@ -74,18 +74,24 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Optional<AccountResponseDTO> updateAccount(AccountRequestDTO accountRequestDTO) {
-        Optional<Account> account = this.accountRepository.findAccountByAccountNumber(accountRequestDTO.getAccountNumber());
+        Optional<Account> account = this.accountRepository.findAccountByUUID(accountRequestDTO.getClientUUID());
         if (account.isEmpty()) {
             throw new AccountException("Account number " + accountRequestDTO.getAccountNumber() + " not exist: " + accountRequestDTO.getClientUUID());
         }
 
-        Account theAccount = mapper.accountRequestDtoToAccount(accountRequestDTO);
+        Account theAccount = account.get();
+//        Account theAccount = mapper.accountRequestDtoToAccount(accountRequestDTO);
         Optional<Client> theClient = this.clientRepository.findClientByUUID(accountRequestDTO.getClientUUID());
         if (theClient.isEmpty()) {
             throw new ClientException("Client not found");
         }
+
         theAccount.setClient(theClient.get());
+        theAccount.setAccountNumber(accountRequestDTO.getAccountNumber());
+        theAccount.setAccountType(accountRequestDTO.getAccountType());
+        theAccount.setBalance(accountRequestDTO.getBalance());
         theAccount.setLastUpdate(LocalDateTime.now());
+
         this.accountRepository.save(theAccount);
         return Optional.of(mapper.accountToAccountResponseDto(theAccount));
     }

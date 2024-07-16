@@ -33,21 +33,20 @@ public class MapStructMapperImpl implements MapStructMapper {
     }
 
     @Override
-    public ClientResponseDTO clientToClientResponseDto(Optional<Client> theClient) {
-        Client client = theClient.get();
+    public ClientResponseDTO clientToClientResponseDto(Client theClient) {
         ClientResponseDTO responseDTO = new ClientResponseDTO();
 
-        responseDTO.setClientId(client.getClientId());
-        responseDTO.setFirstName(client.getFirstName());
-        responseDTO.setLastName(client.getLastName());
-        responseDTO.setTaxNumber(client.getTaxNumber());
-        responseDTO.setAddress(client.getAddress());
-        responseDTO.setEmail(client.getEmail());
-        responseDTO.setPhoneNumber(client.getPhoneNumber());
-        responseDTO.setDateOfBirth(client.getDateOfBirth());
-        responseDTO.setUUID(client.getUUID());
-        responseDTO.setCreatedAt(client.getCreatedAt());
-        responseDTO.setUpdateAt(client.getUpdatedAt());
+        responseDTO.setClientId(theClient.getClientId());
+        responseDTO.setFirstName(theClient.getFirstName());
+        responseDTO.setLastName(theClient.getLastName());
+        responseDTO.setTaxNumber(theClient.getTaxNumber());
+        responseDTO.setAddress(theClient.getAddress());
+        responseDTO.setEmail(theClient.getEmail());
+        responseDTO.setPhoneNumber(theClient.getPhoneNumber());
+        responseDTO.setDateOfBirth(theClient.getDateOfBirth());
+        responseDTO.setUUID(theClient.getUUID());
+        responseDTO.setCreatedAt(theClient.getCreatedAt());
+        responseDTO.setUpdateAt(theClient.getUpdatedAt());
 
         return responseDTO;
     }

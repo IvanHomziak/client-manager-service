@@ -11,7 +11,7 @@ public interface MapStructMapper {
 
     Client clientRequestDtoToClient(ClientRequestDTO clientRequestDTO);
 
-    ClientResponseDTO clientToClientResponseDto(Optional<Client> theClient);
+    ClientResponseDTO clientToClientResponseDto(Client theClient);
 
     List<ClientsInfoDTO> clientsToClientInfoDto(List<Client> clients);
 

@@ -12,6 +12,7 @@ import com.ihomziak.webbankingapp.util.ClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -50,11 +51,11 @@ public class ClientServiceImpl implements ClientService {
 
         List<Account> accounts = Collections.singletonList(account);
         theClient.setAccount(accounts);
-
+        theClient.setCreatedAt(LocalDateTime.now());
         this.clientRepository.save(theClient);
 
-        Optional<Client> client = Optional.of(theClient);
-        return Optional.of(mapper.clientToClientResponseDto(client));
+//        Optional<Client> client = Optional.of(theClient);
+        return Optional.of(mapper.clientToClientResponseDto(theClient));
     }
 
     @Override
@@ -67,7 +68,7 @@ public class ClientServiceImpl implements ClientService {
 
         this.clientRepository.delete(client.get());
 
-        return Optional.of(mapper.clientToClientResponseDto(client));
+        return Optional.of(mapper.clientToClientResponseDto(client.get()));
     }
 
     @Override
@@ -88,16 +89,17 @@ public class ClientServiceImpl implements ClientService {
 
         clientRepository.save(newClient);
 
-        return Optional.ofNullable(mapper.clientToClientResponseDto(theClient));
+        return Optional.ofNullable(mapper.clientToClientResponseDto(newClient));
     }
 
     @Override
     public Optional<ClientResponseDTO> findClientByUUID(String uuid) {
-        if (this.clientRepository.findClientByUUID(uuid).isEmpty()) {
+        Optional<Client> theClient = this.clientRepository.findClientByUUID(uuid);
+
+        if (theClient.isEmpty()) {
             throw new ClientException("Client not exist. UUID: " + uuid);
         }
 
-        Optional<Client> theClient = this.clientRepository.findClientByUUID(uuid);
-        return Optional.ofNullable(this.mapper.clientToClientResponseDto(theClient));
+        return Optional.of(this.mapper.clientToClientResponseDto(theClient.get()));
     }
 }
