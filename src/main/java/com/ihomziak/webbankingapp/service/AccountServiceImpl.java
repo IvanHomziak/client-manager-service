@@ -8,10 +8,10 @@ import com.ihomziak.webbankingapp.dto.AccountRequestDTO;
 import com.ihomziak.webbankingapp.dto.AccountResponseDTO;
 import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.entity.Client;
+import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
 import com.ihomziak.webbankingapp.mapper.MapStructMapper;
-import com.ihomziak.webbankingapp.util.AccountException;
+import com.ihomziak.webbankingapp.exception.AccountException;
 import com.ihomziak.webbankingapp.util.AccountNumberGenerator;
-import com.ihomziak.webbankingapp.util.ClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
         Optional<Client> client = this.clientRepository.findClientByUUID(accountRequestDTO.getClientUUID());
 
         if (client.isEmpty()) {
-            throw new ClientException("Client not found");
+            throw new ClientNotFoundException("Client not found");
         }
 
         Optional<Account> accountInDB = this.accountRepository.findAccountByAccountNumber(accountRequestDTO.getAccountNumber()).stream().findAny();
@@ -82,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
         Account theAccount = account.get();
         Optional<Client> theClient = this.clientRepository.findClientByUUID(accountRequestDTO.getClientUUID());
         if (theClient.isEmpty()) {
-            throw new ClientException("Client not found");
+            throw new ClientNotFoundException("Client not found");
         }
 
         theAccount.setClient(theClient.get());

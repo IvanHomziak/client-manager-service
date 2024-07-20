@@ -1,5 +1,6 @@
 package com.ihomziak.webbankingapp.util;
 
+import com.ihomziak.webbankingapp.exception.ClientException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 

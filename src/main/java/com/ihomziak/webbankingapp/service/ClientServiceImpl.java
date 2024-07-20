@@ -7,8 +7,9 @@ import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
 import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.entity.Client;
 import com.ihomziak.webbankingapp.enums.AccountType;
+import com.ihomziak.webbankingapp.exception.ClientAlreadyExistException;
+import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
 import com.ihomziak.webbankingapp.mapper.MapStructMapperImpl;
-import com.ihomziak.webbankingapp.util.ClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientResponseDTO save(ClientRequestDTO clientRequestDTO) {
         if (this.clientRepository.findClientByTaxNumber(clientRequestDTO.getTaxNumber()).isPresent()) {
-            throw new ClientException("Client already exist");
+            throw new ClientAlreadyExistException("Client already exist");
         }
 
         Client theClient = mapper.clientRequestDtoToClient(clientRequestDTO);
@@ -54,7 +55,6 @@ public class ClientServiceImpl implements ClientService {
         theClient.setCreatedAt(LocalDateTime.now());
         this.clientRepository.save(theClient);
 
-//        Optional<Client> client = Optional.of(theClient);
         return mapper.clientToClientResponseDto(theClient);
     }
 
@@ -63,7 +63,7 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> client = this.clientRepository.findClientByUUID(uuid);
 
         if (client.isEmpty()) {
-            throw new ClientException("Client does not exist");
+            throw new ClientNotFoundException("Client does not exist");
         }
 
         this.clientRepository.delete(client.get());
@@ -76,7 +76,7 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> theClient = clientRepository.findClientByTaxNumber(clientRequestDTO.getTaxNumber());
 
         if (theClient.isEmpty()) {
-            throw new ClientException("Client is not exist");
+            throw new ClientNotFoundException("Client is not exist");
         }
 
         Client newClient = theClient.get();
@@ -86,8 +86,8 @@ public class ClientServiceImpl implements ClientService {
         newClient.setPhoneNumber(clientRequestDTO.getPhoneNumber());
         newClient.setEmail(clientRequestDTO.getEmail());
         newClient.setAddress(clientRequestDTO.getAddress());
-        newClient.setUpdatedAt(LocalDateTime.now()
-        );
+        newClient.setUpdatedAt(LocalDateTime.now());
+
         clientRepository.save(newClient);
 
         return mapper.clientToClientResponseDto(newClient);
@@ -98,7 +98,7 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> theClient = this.clientRepository.findClientByUUID(uuid);
 
         if (theClient.isEmpty()) {
-            throw new ClientException("Client not exist. UUID: " + uuid);
+            throw new ClientNotFoundException("Client not exist. UUID: " + uuid);
         }
 
         return this.mapper.clientToClientResponseDto(theClient.get());

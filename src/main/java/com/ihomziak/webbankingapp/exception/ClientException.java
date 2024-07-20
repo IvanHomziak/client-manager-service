@@ -1,4 +1,4 @@
-package com.ihomziak.webbankingapp.util;
+package com.ihomziak.webbankingapp.exception;
 
 public class ClientException extends  RuntimeException {
     public ClientException(String msg) {
