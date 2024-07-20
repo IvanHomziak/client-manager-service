@@ -80,7 +80,6 @@ public class AccountServiceImpl implements AccountService {
         }
 
         Account theAccount = account.get();
-//        Account theAccount = mapper.accountRequestDtoToAccount(accountRequestDTO);
         Optional<Client> theClient = this.clientRepository.findClientByUUID(accountRequestDTO.getClientUUID());
         if (theClient.isEmpty()) {
             throw new ClientException("Client not found");
@@ -112,6 +111,6 @@ public class AccountServiceImpl implements AccountService {
         if (account.isEmpty()) {
             throw new AccountException("Account not exist: " + uuid);
         }
-        return mapper.accountToAccountInfoDto(account.get();
+        return mapper.accountToAccountInfoDto(account.get());
     }
 }
