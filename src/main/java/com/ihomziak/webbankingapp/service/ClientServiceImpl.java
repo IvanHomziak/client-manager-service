@@ -33,6 +33,9 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<ClientsInfoDTO> findAll() {
         List<Client> clients = clientRepository.findAll();
+        if (clients.isEmpty()) {
+            throw new ClientNotFoundException("Client not found.");
+        }
         return this.mapper.clientsToClientInfoDto(clients);
     }
 

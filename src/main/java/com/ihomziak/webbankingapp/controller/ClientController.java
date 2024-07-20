@@ -28,7 +28,7 @@ public class ClientController {
     public ResponseEntity<ClientResponseDTO> addClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.clientService.save(clientRequestDTO));
     }
-// controllers should return entity
+
     @GetMapping("/clients/{uuid}")
     public ResponseEntity<ClientResponseDTO> getClient(@PathVariable String uuid) {
         return ResponseEntity.status(HttpStatus.FOUND).body(this.clientService.findClientByUUID(uuid));

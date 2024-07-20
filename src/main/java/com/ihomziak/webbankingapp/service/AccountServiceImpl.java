@@ -8,6 +8,7 @@ import com.ihomziak.webbankingapp.dto.AccountRequestDTO;
 import com.ihomziak.webbankingapp.dto.AccountResponseDTO;
 import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.entity.Client;
+import com.ihomziak.webbankingapp.exception.AccountNotFoundException;
 import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
 import com.ihomziak.webbankingapp.mapper.MapStructMapper;
 import com.ihomziak.webbankingapp.exception.AccountException;
@@ -66,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
         Optional<Account> account = this.accountRepository.findAccountByUUID(uuid);
 
         if (account.isEmpty()) {
-            throw new AccountException("Account not exist: " + uuid);
+            throw new AccountNotFoundException("Account not exist: " + uuid);
         }
         this.accountRepository.delete(account.get());
         return mapper.accountToAccountInfoDto(account.get());
@@ -76,7 +77,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountResponseDTO updateAccount(AccountRequestDTO accountRequestDTO) {
         Optional<Account> account = this.accountRepository.findAccountByUUID(accountRequestDTO.getClientUUID());
         if (account.isEmpty()) {
-            throw new AccountException("Account number " + accountRequestDTO.getAccountNumber() + " not exist: " + accountRequestDTO.getClientUUID());
+            throw new AccountNotFoundException("Account number " + accountRequestDTO.getAccountNumber() + " not exist: " + accountRequestDTO.getClientUUID());
         }
 
         Account theAccount = account.get();
@@ -98,6 +99,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<AccountInfoDTO> findAllAccounts() {
         List<Account> accountList = this.accountRepository.findAll();
+        if (accountList.isEmpty()) {
+            throw new AccountNotFoundException("Accounts not found exception");
+        }
         List<AccountInfoDTO> accountInfoDTOList = new ArrayList<>();
         for (Account account : accountList) {
             accountInfoDTOList.add(mapper.accountToAccountInfoDto(account));
@@ -109,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountInfoDTO findAccountByUuid(String uuid) {
         Optional<Account> account = this.accountRepository.findAccountByUUID(uuid);
         if (account.isEmpty()) {
-            throw new AccountException("Account not exist: " + uuid);
+            throw new AccountNotFoundException("Account not exist. UUID: " + uuid);
         }
         return mapper.accountToAccountInfoDto(account.get());
     }

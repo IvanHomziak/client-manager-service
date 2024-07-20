@@ -1,6 +1,8 @@
 package com.ihomziak.webbankingapp.errors;
 
+import com.ihomziak.webbankingapp.exception.AccountAlreadyExistException;
 import com.ihomziak.webbankingapp.exception.AccountNotFoundException;
+import com.ihomziak.webbankingapp.exception.ClientAlreadyExistException;
 import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +25,14 @@ public class GlobalExceptionHandler {
     /**
      * Provides handling for exceptions throughout this service.
      *
-     * @param ex The target exception
+     * @param ex      The target exception
      * @param request The current request
      */
     @ExceptionHandler({
             ClientNotFoundException.class,
-            AccountNotFoundException.class
+            AccountNotFoundException.class,
+            AccountAlreadyExistException.class,
+            ClientAlreadyExistException.class,
     })
     @Nullable
     public final ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
@@ -36,19 +40,23 @@ public class GlobalExceptionHandler {
 
         LOGGER.error("Handling {} due to {}", ex.getClass().getSimpleName(), ex.getMessage());
 
-        if (ex instanceof ClientNotFoundException) {
+        if (ex instanceof ClientNotFoundException clientNotFoundException) {
             HttpStatus status = HttpStatus.NOT_FOUND;
-            ClientNotFoundException clientNotFoundException = (ClientNotFoundException) ex;
 
-            return handleUserNotFoundException(clientNotFoundException, headers, status, request);
-        }
-//        else if (ex instanceof AccountNotFoundException) {
-//            HttpStatus status = HttpStatus.BAD_REQUEST;
-//            AccountNotFoundException cnae = (AccountNotFoundException) ex;
-//
-//            return handleContentNotAllowedException(cnae, headers, status, request);
-//        }
-        else {
+            return handleNotFoundException(clientNotFoundException, headers, status, request);
+        } else if (ex instanceof AccountNotFoundException accountNotFoundException) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+
+            return handleNotFoundException(accountNotFoundException, headers, status, request);
+        } else if (ex instanceof AccountAlreadyExistException accountException) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+
+            return handleNotFoundException(accountException, headers, status, request);
+        } else if (ex instanceof ClientAlreadyExistException accountException) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+
+            return handleNotFoundException(accountException, headers, status, request);
+        } else {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Unknown exception type: {}", ex.getClass().getName());
             }
@@ -61,15 +69,15 @@ public class GlobalExceptionHandler {
     /**
      * Customize the response for ClientNotFoundException.
      *
-     * @param ex The exception
+     * @param ex      The exception
      * @param headers The headers to be written to the response
-     * @param status The selected response status
+     * @param status  The selected response status
      * @return a {@code ResponseEntity} instance
      */
-    protected ResponseEntity<ApiError> handleUserNotFoundException(ClientNotFoundException ex,
-                                                                   HttpHeaders headers,
-                                                                   HttpStatus status,
-                                                                   WebRequest request) {
+    protected ResponseEntity<ApiError> handleNotFoundException(Exception ex,
+                                                               HttpHeaders headers,
+                                                               HttpStatus status,
+                                                               WebRequest request) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return handleExceptionInternal(ex, new ApiError(errors), headers, status, request);
     }
@@ -94,6 +102,7 @@ public class GlobalExceptionHandler {
 //        return handleExceptionInternal(ex, new ApiError(errorMessages), headers, status, request);
 //    }
 
+
     /**
      * A single place to customize the response body of all Exception types.
      *
@@ -101,10 +110,10 @@ public class GlobalExceptionHandler {
      * request attribute and creates a {@link ResponseEntity} from the given
      * body, headers, and status.
      *
-     * @param ex The exception
-     * @param body The body for the response
+     * @param ex      The exception
+     * @param body    The body for the response
      * @param headers The headers for the response
-     * @param status The response status
+     * @param status  The response status
      * @param request The current request
      */
     protected ResponseEntity<ApiError> handleExceptionInternal(Exception ex,
