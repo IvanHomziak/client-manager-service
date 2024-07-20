@@ -86,7 +86,8 @@ public class ClientServiceImpl implements ClientService {
         newClient.setPhoneNumber(clientRequestDTO.getPhoneNumber());
         newClient.setEmail(clientRequestDTO.getEmail());
         newClient.setAddress(clientRequestDTO.getAddress());
-
+        newClient.setUpdatedAt(LocalDateTime.now()
+        );
         clientRepository.save(newClient);
 
         return mapper.clientToClientResponseDto(newClient);
