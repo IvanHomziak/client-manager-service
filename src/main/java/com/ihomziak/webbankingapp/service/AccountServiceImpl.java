@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<AccountResponseDTO> createCheckingAccount(AccountRequestDTO accountRequestDTO) {
+    public AccountResponseDTO createCheckingAccount(AccountRequestDTO accountRequestDTO) {
         Optional<Client> client = this.clientRepository.findClientByUUID(accountRequestDTO.getClientUUID());
 
         if (client.isEmpty()) {
@@ -58,22 +58,22 @@ public class AccountServiceImpl implements AccountService {
 
         accountResponseDTO.setAccountHolderDTO(accountHolderDTO);
 
-        return Optional.of(accountResponseDTO);
+        return accountResponseDTO;
     }
 
     @Override
-    public Optional<AccountInfoDTO> deleteAccount(String uuid) {
+    public AccountInfoDTO deleteAccount(String uuid) {
         Optional<Account> account = this.accountRepository.findAccountByUUID(uuid);
 
         if (account.isEmpty()) {
             throw new AccountException("Account not exist: " + uuid);
         }
         this.accountRepository.delete(account.get());
-        return Optional.of(mapper.accountToAccountInfoDto(account.get()));
+        return mapper.accountToAccountInfoDto(account.get());
     }
 
     @Override
-    public Optional<AccountResponseDTO> updateAccount(AccountRequestDTO accountRequestDTO) {
+    public AccountResponseDTO updateAccount(AccountRequestDTO accountRequestDTO) {
         Optional<Account> account = this.accountRepository.findAccountByUUID(accountRequestDTO.getClientUUID());
         if (account.isEmpty()) {
             throw new AccountException("Account number " + accountRequestDTO.getAccountNumber() + " not exist: " + accountRequestDTO.getClientUUID());
@@ -93,25 +93,25 @@ public class AccountServiceImpl implements AccountService {
         theAccount.setLastUpdate(LocalDateTime.now());
 
         this.accountRepository.save(theAccount);
-        return Optional.of(mapper.accountToAccountResponseDto(theAccount));
+        return mapper.accountToAccountResponseDto(theAccount);
     }
 
     @Override
-    public List<Optional<AccountInfoDTO>> findAllAccounts() {
+    public List<AccountInfoDTO> findAllAccounts() {
         List<Account> accountList = this.accountRepository.findAll();
-        List<Optional<AccountInfoDTO>> accountInfoDTOList = new ArrayList<>();
+        List<AccountInfoDTO> accountInfoDTOList = new ArrayList<>();
         for (Account account : accountList) {
-            accountInfoDTOList.add(Optional.of(mapper.accountToAccountInfoDto(account)));
+            accountInfoDTOList.add(mapper.accountToAccountInfoDto(account));
         }
         return accountInfoDTOList;
     }
 
     @Override
-    public Optional<AccountInfoDTO> findAccountByUuid(String uuid) {
+    public AccountInfoDTO findAccountByUuid(String uuid) {
         Optional<Account> account = this.accountRepository.findAccountByUUID(uuid);
         if (account.isEmpty()) {
             throw new AccountException("Account not exist: " + uuid);
         }
-        return Optional.of(mapper.accountToAccountInfoDto(account.get()));
+        return mapper.accountToAccountInfoDto(account.get();
     }
 }

@@ -57,9 +57,7 @@ public class MapStructMapperImpl implements MapStructMapper {
         ClientsInfoDTO clientInfoDTO = new ClientsInfoDTO();
         List<ClientsInfoDTO> clientsInfoDTOList = new ArrayList<>();
 
-        for (int i = 0; i < clients.size(); i++) {
-            Client client = clients.get(i);
-
+        for (Client client : clients) {
             clientInfoDTO.setFirstName(client.getFirstName());
             clientInfoDTO.setLastName(client.getLastName());
             clientInfoDTO.setEmail(client.getEmail());

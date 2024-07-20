@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -26,27 +25,27 @@ public class ClientController {
     }
 
     @PostMapping("/clients")
-    public ResponseEntity<Optional<ClientResponseDTO>> addClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
+    public ResponseEntity<ClientResponseDTO> addClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.clientService.save(clientRequestDTO));
     }
-
+// controllers should return entity
     @GetMapping("/clients/{uuid}")
-    public ResponseEntity<Optional<ClientResponseDTO>> getClient(@PathVariable String uuid) {
+    public ResponseEntity<ClientResponseDTO> getClient(@PathVariable String uuid) {
         return ResponseEntity.status(HttpStatus.FOUND).body(this.clientService.findClientByUUID(uuid));
     }
 
     @GetMapping("/clients")
-    public ResponseEntity<Optional<List<ClientsInfoDTO>>> getClients() {
+    public ResponseEntity<List<ClientsInfoDTO>> getClients() {
         return ResponseEntity.status(HttpStatus.FOUND).body(this.clientService.findAll());
     }
 
     @DeleteMapping("/clients/{uuid}")
-    public ResponseEntity<Optional<ClientResponseDTO>> deleteClient(@PathVariable String uuid) {
+    public ResponseEntity<ClientResponseDTO> deleteClient(@PathVariable String uuid) {
         return ResponseEntity.status(HttpStatus.OK).body(this.clientService.deleteByUUID(uuid));
     }
 
     @PatchMapping("/clients/update")
-    public ResponseEntity<Optional<ClientResponseDTO>> updateClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
+    public ResponseEntity<ClientResponseDTO> updateClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.clientService.update(clientRequestDTO));
     }
 }

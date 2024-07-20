@@ -23,27 +23,27 @@ public class AccountController {
     }
 
     @GetMapping("/account/{uuid}")
-    public ResponseEntity<Optional<AccountInfoDTO>> getAccount(@PathVariable String uuid) {
+    public ResponseEntity<AccountInfoDTO> getAccount(@PathVariable String uuid) {
         return ResponseEntity.status(HttpStatus.FOUND).body(this.accountService.findAccountByUuid(uuid));
     }
 
     @PostMapping("/account")
-    public ResponseEntity<Optional<AccountResponseDTO>> createCheckingAccount(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
+    public ResponseEntity<AccountResponseDTO> createCheckingAccount(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.accountService.createCheckingAccount(accountRequestDTO));
     }
 
     @DeleteMapping("/account/{uuid}")
-    public ResponseEntity<Optional<AccountInfoDTO>> deleteAccount(@PathVariable String uuid) {
+    public ResponseEntity<AccountInfoDTO> deleteAccount(@PathVariable String uuid) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.accountService.deleteAccount(uuid));
     }
 
     @PatchMapping("/account")
-    public ResponseEntity<Optional<AccountResponseDTO>> updateAccount(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
+    public ResponseEntity<AccountResponseDTO> updateAccount(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.accountService.updateAccount(accountRequestDTO));
     }
 
     @GetMapping("/account")
-    public ResponseEntity<List<Optional<AccountInfoDTO>>> getAccount() {
+    public ResponseEntity<List<AccountInfoDTO>> getAccount() {
         return ResponseEntity.status(HttpStatus.FOUND).body(this.accountService.findAllAccounts());
     }
 }

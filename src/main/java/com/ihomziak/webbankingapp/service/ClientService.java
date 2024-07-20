@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface ClientService {
 
-    Optional<List<ClientsInfoDTO>> findAll();
+    List<ClientsInfoDTO> findAll();
 
-    Optional<ClientResponseDTO> save(ClientRequestDTO client);
+    ClientResponseDTO save(ClientRequestDTO client);
 
-    Optional<ClientResponseDTO> deleteByUUID(String uuid);
+    ClientResponseDTO deleteByUUID(String uuid);
 
-    Optional<ClientResponseDTO> update(ClientRequestDTO clientRequestDTO);
+    ClientResponseDTO update(ClientRequestDTO clientRequestDTO);
 
-    Optional<ClientResponseDTO> findClientByUUID(String uuid);
+    ClientResponseDTO findClientByUUID(String uuid);
 }

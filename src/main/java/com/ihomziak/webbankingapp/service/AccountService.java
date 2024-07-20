@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface AccountService {
 
-    Optional<AccountInfoDTO> findAccountByUuid(String accountNumber);
+    AccountInfoDTO findAccountByUuid(String accountNumber);
 
-    Optional<AccountResponseDTO> createCheckingAccount(AccountRequestDTO account);
+    AccountResponseDTO createCheckingAccount(AccountRequestDTO account);
 
-    Optional<AccountInfoDTO> deleteAccount(String uuid);
+    AccountInfoDTO deleteAccount(String uuid);
 
-    Optional<AccountResponseDTO> updateAccount(AccountRequestDTO accountRequestDTO);
+    AccountResponseDTO updateAccount(AccountRequestDTO accountRequestDTO);
 
-    List<Optional<AccountInfoDTO>> findAllAccounts();
+    List<AccountInfoDTO> findAllAccounts();
 }

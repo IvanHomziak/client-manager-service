@@ -30,13 +30,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<List<ClientsInfoDTO>> findAll() {
+    public List<ClientsInfoDTO> findAll() {
         List<Client> clients = clientRepository.findAll();
-        return Optional.ofNullable(this.mapper.clientsToClientInfoDto(clients));
+        return this.mapper.clientsToClientInfoDto(clients);
     }
 
     @Override
-    public Optional<ClientResponseDTO> save(ClientRequestDTO clientRequestDTO) {
+    public ClientResponseDTO save(ClientRequestDTO clientRequestDTO) {
         if (this.clientRepository.findClientByTaxNumber(clientRequestDTO.getTaxNumber()).isPresent()) {
             throw new ClientException("Client already exist");
         }
@@ -55,11 +55,11 @@ public class ClientServiceImpl implements ClientService {
         this.clientRepository.save(theClient);
 
 //        Optional<Client> client = Optional.of(theClient);
-        return Optional.of(mapper.clientToClientResponseDto(theClient));
+        return mapper.clientToClientResponseDto(theClient);
     }
 
     @Override
-    public Optional<ClientResponseDTO> deleteByUUID(String uuid) {
+    public ClientResponseDTO deleteByUUID(String uuid) {
         Optional<Client> client = this.clientRepository.findClientByUUID(uuid);
 
         if (client.isEmpty()) {
@@ -68,11 +68,11 @@ public class ClientServiceImpl implements ClientService {
 
         this.clientRepository.delete(client.get());
 
-        return Optional.of(mapper.clientToClientResponseDto(client.get()));
+        return mapper.clientToClientResponseDto(client.get());
     }
 
     @Override
-    public Optional<ClientResponseDTO> update(ClientRequestDTO clientRequestDTO) {
+    public ClientResponseDTO update(ClientRequestDTO clientRequestDTO) {
         Optional<Client> theClient = clientRepository.findClientByTaxNumber(clientRequestDTO.getTaxNumber());
 
         if (theClient.isEmpty()) {
@@ -89,17 +89,17 @@ public class ClientServiceImpl implements ClientService {
 
         clientRepository.save(newClient);
 
-        return Optional.ofNullable(mapper.clientToClientResponseDto(newClient));
+        return mapper.clientToClientResponseDto(newClient);
     }
 
     @Override
-    public Optional<ClientResponseDTO> findClientByUUID(String uuid) {
+    public ClientResponseDTO findClientByUUID(String uuid) {
         Optional<Client> theClient = this.clientRepository.findClientByUUID(uuid);
 
         if (theClient.isEmpty()) {
             throw new ClientException("Client not exist. UUID: " + uuid);
         }
 
-        return Optional.of(this.mapper.clientToClientResponseDto(theClient.get()));
+        return this.mapper.clientToClientResponseDto(theClient.get());
     }
 }
