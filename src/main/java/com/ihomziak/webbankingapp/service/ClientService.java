@@ -5,7 +5,6 @@ import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
 import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ClientService {
 
