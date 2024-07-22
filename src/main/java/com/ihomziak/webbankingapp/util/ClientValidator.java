@@ -1,11 +1,11 @@
 package com.ihomziak.webbankingapp.util;
 
-import com.ihomziak.webbankingapp.entity.Client;
-import com.ihomziak.webbankingapp.service.ClientServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
+//import com.ihomziak.webbankingapp.entity.Client;
+//import com.ihomziak.webbankingapp.service.ClientServiceImpl;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Component;
+//import org.springframework.validation.Errors;
+//import org.springframework.validation.Validator;
 
 //@Component
 public class ClientValidator
