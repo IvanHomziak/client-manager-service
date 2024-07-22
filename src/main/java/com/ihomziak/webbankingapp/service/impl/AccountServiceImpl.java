@@ -1,4 +1,4 @@
-package com.ihomziak.webbankingapp.service;
+package com.ihomziak.webbankingapp.service.impl;
 
 import com.ihomziak.webbankingapp.dao.AccountRepository;
 import com.ihomziak.webbankingapp.dao.ClientRepository;
@@ -11,6 +11,7 @@ import com.ihomziak.webbankingapp.entity.Client;
 import com.ihomziak.webbankingapp.exception.AccountNotFoundException;
 import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
 import com.ihomziak.webbankingapp.mapper.MapStructMapper;
+import com.ihomziak.webbankingapp.service.AccountService;
 import com.ihomziak.webbankingapp.util.AccountNumberGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

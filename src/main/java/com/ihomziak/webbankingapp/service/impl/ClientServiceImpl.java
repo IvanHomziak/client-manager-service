@@ -1,4 +1,4 @@
-package com.ihomziak.webbankingapp.service;
+package com.ihomziak.webbankingapp.service.impl;
 
 import com.ihomziak.webbankingapp.dao.ClientRepository;
 import com.ihomziak.webbankingapp.dto.ClientRequestDTO;
@@ -10,6 +10,7 @@ import com.ihomziak.webbankingapp.enums.AccountType;
 import com.ihomziak.webbankingapp.exception.ClientAlreadyExistException;
 import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
 import com.ihomziak.webbankingapp.mapper.MapStructMapperImpl;
+import com.ihomziak.webbankingapp.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
