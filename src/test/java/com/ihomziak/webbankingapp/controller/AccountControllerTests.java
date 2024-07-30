@@ -1,6 +1,8 @@
 package com.ihomziak.webbankingapp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ihomziak.webbankingapp.dto.ClientRequestDTO;
 import com.ihomziak.webbankingapp.dto.ClientResponseDTO;
 import com.ihomziak.webbankingapp.dto.ClientsInfoDTO;
@@ -20,12 +22,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,6 +54,8 @@ public class AccountControllerTests {
         mockMvc = MockMvcBuilders.standaloneSetup(clientController).setControllerAdvice(new GlobalExceptionHandler()) // Ensure this is added
                 .build();
         objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         clientRequestDTO = new ClientRequestDTO();
         clientRequestDTO.setFirstName("John");
@@ -71,9 +74,9 @@ public class AccountControllerTests {
         clientResponseDTO.setTaxNumber(clientRequestDTO.getTaxNumber());
         clientResponseDTO.setEmail(clientRequestDTO.getEmail());
         clientResponseDTO.setPhoneNumber(clientRequestDTO.getPhoneNumber());
-        clientResponseDTO.setAddress(clientRequestDTO.getAddress());
-        clientResponseDTO.setCreatedAt(LocalDateTime.now().minusDays(3));
-        clientResponseDTO.setUpdateAt(LocalDateTime.now().minusDays(1));
+        clientResponseDTO.setAddress(clientRequestDTO.getAddress() + 1);
+        clientResponseDTO.setCreatedAt(null);
+        clientResponseDTO.setUpdateAt(null);
         clientResponseDTO.setUUID("test-uuid");
 
         clientsInfoDTO = new ClientsInfoDTO();
@@ -136,7 +139,7 @@ public class AccountControllerTests {
 
     @Test
     public void getClients_ShouldReturnNotFound_WhenClientsNotExists() throws Exception {
-        when(clientService.findAll()).thenThrow(new ClientNotFoundException("Clients not exist"));
+        when(clientService.findAll()).thenThrow(new ClientNotFoundException("Clients not exist."));
 
         mockMvc.perform(get("/api/clients").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -171,9 +174,11 @@ public class AccountControllerTests {
     @Test
     public void updateClient_ShouldReturnClientResponseDTO_WhenClientExists() throws Exception {
 
-        when(clientService.update(clientRequestDTO)).thenReturn(clientResponseDTO);
+        when(clientService.update(any(ClientRequestDTO.class))).thenReturn(clientResponseDTO);
 
-        mockMvc.perform(patch("/api/clients/update").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(patch("/api/clients/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(clientRequestDTO)))
                 .andExpect(status().isAccepted())
                 .andExpect(content().json(objectMapper.writeValueAsString(clientResponseDTO)));
     }
