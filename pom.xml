@@ -54,24 +54,27 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.10.2</version>
+			<scope>test</scope>
+		</dependency>
 
-<!--&lt;!&ndash;		ModelMapper для Spring Boot&ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>org.modelmapper</groupId>-->
-<!--			<artifactId>modelmapper</artifactId>-->
-<!--			<version>3.2.0</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.mapstruct</groupId>-->
-<!--			<artifactId>mapstruct-processor</artifactId>-->
-<!--			<version>1.5.5.Final</version>-->
-<!--		</dependency>-->
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
+			<scope>test</scope>
+		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.mapstruct</groupId>-->
-<!--			<artifactId>mapstruct</artifactId>-->
-<!--			<version>1.5.5.Final</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.17.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

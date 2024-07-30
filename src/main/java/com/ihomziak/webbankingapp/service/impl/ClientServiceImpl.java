@@ -35,7 +35,7 @@ public class ClientServiceImpl implements ClientService {
     public List<ClientsInfoDTO> findAll() {
         List<Client> clients = clientRepository.findAll();
         if (clients.isEmpty()) {
-            throw new ClientNotFoundException("Client not found.");
+            throw new ClientNotFoundException("Clients not found.");
         }
         return this.mapper.clientsToClientInfoDto(clients);
     }
@@ -90,6 +90,7 @@ public class ClientServiceImpl implements ClientService {
         newClient.setPhoneNumber(clientRequestDTO.getPhoneNumber());
         newClient.setEmail(clientRequestDTO.getEmail());
         newClient.setAddress(clientRequestDTO.getAddress());
+        newClient.setCreatedAt(theClient.get().getCreatedAt());
         newClient.setUpdatedAt(LocalDateTime.now());
 
         clientRepository.save(newClient);
