@@ -1,4 +1,4 @@
 package com.ihomziak.webbankingapp.controller;
 
-public class AccountControllerTests {
+public class AccountControllerTest {
 }
