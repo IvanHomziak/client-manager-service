@@ -98,22 +98,6 @@
 					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-compiler-plugin</artifactId>-->
-<!--&lt;!&ndash;				<version>3.5.1</version>&ndash;&gt;-->
-<!--				<configuration>-->
-<!--					<source>${java.version}</source> &lt;!&ndash; depending on your project. In this example, Java 11 is used &ndash;&gt;-->
-<!--					<target>${java.version}</target> &lt;!&ndash; depending on your project. In this example, Java 11 is used &ndash;&gt;-->
-<!--					<annotationProcessorPaths>-->
-<!--						<path>-->
-<!--							<groupId>org.mapstruct</groupId>-->
-<!--							<artifactId>mapstruct-processor</artifactId>-->
-<!--							<version>1.5.5.Final</version>-->
-<!--						</path>-->
-<!--					</annotationProcessorPaths>-->
-<!--				</configuration>-->
-<!--			</plugin>-->
 		</plugins>
 		<finalName>springboot-mysql-docker</finalName>
 	</build>
