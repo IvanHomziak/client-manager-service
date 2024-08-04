@@ -42,7 +42,7 @@ public class AccountController {
     }
 
     @GetMapping("/account")
-    public ResponseEntity<List<AccountInfoDTO>> getAccount() {
+    public ResponseEntity<List<AccountInfoDTO>> getAccounts() {
         return ResponseEntity.status(HttpStatus.FOUND).body(this.accountService.findAllAccounts());
     }
 }

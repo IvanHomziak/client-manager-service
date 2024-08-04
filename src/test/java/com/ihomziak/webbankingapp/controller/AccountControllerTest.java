@@ -1,11 +1,13 @@
 package com.ihomziak.webbankingapp.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ihomziak.webbankingapp.dto.*;
 import com.ihomziak.webbankingapp.enums.AccountType;
 import com.ihomziak.webbankingapp.errors.GlobalExceptionHandler;
+import com.ihomziak.webbankingapp.exception.AccountNotFoundException;
 import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
 import com.ihomziak.webbankingapp.service.AccountService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,9 +21,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -108,5 +113,61 @@ public class AccountControllerTest {
         mockMvc.perform(get("/api/account/{uuid}", uuid).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json("{\"errors\":[\"Account not exist. UUID: non-existent-uuid\"]}"));
+    }
+
+    @Test
+    void createCheckingAccount() throws Exception {
+        when(accountService.createCheckingAccount(any(AccountRequestDTO.class))).thenReturn(accountResponseDTO);
+
+
+        mockMvc.perform(post("/api/account")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(accountRequestDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(objectMapper.writeValueAsString(accountResponseDTO)));
+
+
+    }
+
+    @Test
+    void deleteAccount_ShouldReturnAccountResponseDto_WhenAccountExists() throws Exception {
+        when(accountService.deleteAccount(clientUuid)).thenReturn(accountInfoDTO);
+
+        mockMvc.perform(delete("/api/account/{uuid}", clientUuid))
+                .andExpect(status().isAccepted())
+                .andExpect(content().json(objectMapper.writeValueAsString(accountInfoDTO)));
+    }
+
+    @Test
+    void deleteAccount_ShouldReturnAccountNotFound_WhenAccountNotExists() throws Exception {
+        when(accountService.deleteAccount(clientUuid)).thenThrow(new AccountNotFoundException("Account not exist. UUID: " + clientUuid));
+
+        mockMvc.perform(delete("/api/account/{uuid}", clientUuid))
+                .andExpect(content().json("{\"errors\":[\"Account not exist. UUID: " + clientUuid + "\"]}"));
+    }
+
+    @Test
+    void updateAccount() throws Exception {
+        when(accountService.updateAccount(any(AccountRequestDTO.class))).thenReturn(accountResponseDTO);
+
+        mockMvc.perform(patch("/api/account")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(accountRequestDTO)))
+                .andExpect(status().isAccepted())
+                .andExpect(content().json(objectMapper.writeValueAsString(accountResponseDTO)));
+    }
+
+    @Test
+    void getAccounts() throws Exception {
+        List<AccountInfoDTO> accountInfoDTOList = new ArrayList<>();
+        accountInfoDTOList.add(accountInfoDTO);
+        accountInfoDTOList.add(accountInfoDTO);
+
+        when(accountService.findAllAccounts()).thenReturn(accountInfoDTOList);
+
+        mockMvc.perform(get("/api/account")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isFound())
+                .andExpect(content().json(objectMapper.writeValueAsString(accountInfoDTOList)));
     }
 }
