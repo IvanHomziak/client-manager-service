@@ -19,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,22 +33,17 @@ public class AccountControllerTest {
 
     @Mock
     private AccountService accountService;
-    @Mock
-    private GlobalExceptionHandler exceptionHandler;
 
     @InjectMocks
     private AccountController clientController;
 
     private MockMvc mockMvc;
 
-    private LocalDateTime localDate;
     private ObjectMapper objectMapper;
     private AccountRequestDTO accountRequestDTO;
     private AccountResponseDTO accountResponseDTO;
-    private AccountHolderDTO accountHolder;
     private AccountInfoDTO accountInfoDTO;
     private String clientUuid;
-    private String accountNumber;
 
     @BeforeEach
     public void setUp() {
@@ -62,7 +56,7 @@ public class AccountControllerTest {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         clientUuid = "206625ce-3ee7-4174-8f92-4bdc41c18274";
-        accountNumber = "165445000023211234";
+        String accountNumber = "165445000023211234";
 
         accountInfoDTO = new AccountInfoDTO();
         accountInfoDTO.setAccountNumber(accountNumber);
@@ -76,7 +70,7 @@ public class AccountControllerTest {
         accountRequestDTO.setBalance(1000);
         accountRequestDTO.setClientUUID("206625ce-3ee7-4174-8f92-4bdc41c18274");
 
-        accountHolder = new AccountHolderDTO();
+        AccountHolderDTO accountHolder = new AccountHolderDTO();
         accountHolder.setFirstName("John");
         accountHolder.setLastName("Doe");
         accountHolder.setUUID(clientUuid);

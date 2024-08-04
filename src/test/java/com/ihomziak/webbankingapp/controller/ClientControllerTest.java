@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -32,8 +31,6 @@ public class ClientControllerTest {
 
     @Mock
     private ClientService clientService;
-    @Mock
-    private GlobalExceptionHandler exceptionHandler;
 
     @InjectMocks
     private ClientController clientController;
@@ -43,7 +40,6 @@ public class ClientControllerTest {
     private ClientRequestDTO clientRequestDTO;
     private ClientResponseDTO clientResponseDTO;
     private ClientsInfoDTO clientsInfoDTO;
-    private LocalDateTime localDate;
     private ObjectMapper objectMapper;
 
 
