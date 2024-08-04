@@ -120,7 +120,7 @@ public class ClientControllerTest {
 
         mockMvc.perform(get("/api/clients/{uuid}", uuid).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json("{\"errors\":[\"Client not exist. UUID: non-existent-uuid\"]}"));
+                .andExpect(content().json("{\"error\":\"Client not exist. UUID: non-existent-uuid\"}"));
     }
 
     @Test
@@ -142,7 +142,7 @@ public class ClientControllerTest {
 
         mockMvc.perform(get("/api/clients").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json("{\"errors\":[\"Clients not exist.\"]}"));
+                .andExpect(content().json("{\"error\":\"Clients not exist.\"}"));
 
 
     }
@@ -167,7 +167,7 @@ public class ClientControllerTest {
         mockMvc.perform(delete("/api/clients/{uuid}", uuid)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json("{\"errors\":[\"Client does not exist\"]}"));
+                .andExpect(content().json("{\"error\":\"Client does not exist\"}"));
     }
 
     @Test

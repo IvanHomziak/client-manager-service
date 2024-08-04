@@ -1,0 +1,17 @@
+package com.ihomziak.webbankingapp.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Setter
+@Getter
+public class ErrorDTO {
+    private String error;
+
+    public ErrorDTO(String error) {
+        this.error = error;
+    }
+
+}

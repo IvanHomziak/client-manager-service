@@ -1,6 +1,5 @@
 package com.ihomziak.webbankingapp.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -112,7 +111,7 @@ public class AccountControllerTest {
 
         mockMvc.perform(get("/api/account/{uuid}", uuid).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json("{\"errors\":[\"Account not exist. UUID: non-existent-uuid\"]}"));
+                .andExpect(content().json("{\"error\":\"Account not exist. UUID: non-existent-uuid\"}"));
     }
 
     @Test
@@ -143,7 +142,7 @@ public class AccountControllerTest {
         when(accountService.deleteAccount(clientUuid)).thenThrow(new AccountNotFoundException("Account not exist. UUID: " + clientUuid));
 
         mockMvc.perform(delete("/api/account/{uuid}", clientUuid))
-                .andExpect(content().json("{\"errors\":[\"Account not exist. UUID: " + clientUuid + "\"]}"));
+                .andExpect(content().json("{\"error\":\"Account not exist. UUID: " + clientUuid + "\"}"));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.ihomziak.webbankingapp.errors;
 
+import com.ihomziak.webbankingapp.dto.ErrorDTO;
 import com.ihomziak.webbankingapp.exception.AccountAlreadyExistException;
 import com.ihomziak.webbankingapp.exception.AccountNotFoundException;
 import com.ihomziak.webbankingapp.exception.ClientAlreadyExistException;
@@ -14,9 +15,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.WebUtils;
-
-import java.util.Collections;
-import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -35,7 +33,7 @@ public class GlobalExceptionHandler {
             ClientAlreadyExistException.class,
     })
     @Nullable
-    public final ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
+    public final ResponseEntity<ErrorDTO> handleException(Exception ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
 
         LOGGER.error("Handling {} due to {}", ex.getClass().getSimpleName(), ex.getMessage());
@@ -74,12 +72,12 @@ public class GlobalExceptionHandler {
      * @param status  The selected response status
      * @return a {@code ResponseEntity} instance
      */
-    protected ResponseEntity<ApiError> handleNotFoundException(Exception ex,
+    protected ResponseEntity<ErrorDTO> handleNotFoundException(Exception ex,
                                                                HttpHeaders headers,
                                                                HttpStatus status,
                                                                WebRequest request) {
-        List<String> errors = Collections.singletonList(ex.getMessage());
-        return handleExceptionInternal(ex, new ApiError(errors), headers, status, request);
+//        List<String> errors = Collections.singletonList(ex.getMessage());
+        return handleExceptionInternal(ex, new ErrorDTO(ex.getMessage()), headers, status, request);
     }
 
     /**
@@ -104,27 +102,27 @@ public class GlobalExceptionHandler {
 
 
     /**
-     * A single place to customize the response body of all Exception types.
+     * A single place to customize the response errorMessage of all Exception types.
      *
      * <p>The default implementation sets the {@link WebUtils#ERROR_EXCEPTION_ATTRIBUTE}
      * request attribute and creates a {@link ResponseEntity} from the given
-     * body, headers, and status.
+     * errorMessage, headers, and status.
      *
      * @param ex      The exception
-     * @param body    The body for the response
+     * @param errorMessage    The errorMessage for the response
      * @param headers The headers for the response
      * @param status  The response status
      * @param request The current request
      */
-    protected ResponseEntity<ApiError> handleExceptionInternal(Exception ex,
-                                                               @Nullable ApiError body,
+    protected ResponseEntity<ErrorDTO> handleExceptionInternal(Exception ex,
+                                                               @Nullable ErrorDTO errorMessage,
                                                                HttpHeaders headers,
                                                                HttpStatus status,
                                                                WebRequest request) {
         if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
             request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
         }
-
-        return new ResponseEntity<>(body, headers, status);
+        System.out.println(new ResponseEntity<>(errorMessage, headers, status));
+        return new ResponseEntity<>(errorMessage, headers, status);
     }
 }
