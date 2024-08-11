@@ -1,10 +1,7 @@
 package com.ihomziak.webbankingapp.errors;
 
 import com.ihomziak.webbankingapp.dto.ErrorDTO;
-import com.ihomziak.webbankingapp.exception.AccountAlreadyExistException;
-import com.ihomziak.webbankingapp.exception.AccountNotFoundException;
-import com.ihomziak.webbankingapp.exception.ClientAlreadyExistException;
-import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
+import com.ihomziak.webbankingapp.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +28,7 @@ public class GlobalExceptionHandler {
             AccountNotFoundException.class,
             AccountAlreadyExistException.class,
             ClientAlreadyExistException.class,
+            AccountNumberQuantityException.class
     })
     @Nullable
     public final ResponseEntity<ErrorDTO> handleException(Exception ex, WebRequest request) {
@@ -40,20 +38,24 @@ public class GlobalExceptionHandler {
 
         if (ex instanceof ClientNotFoundException clientNotFoundException) {
             HttpStatus status = HttpStatus.NOT_FOUND;
+            return handleException(clientNotFoundException, headers, status, request);
 
-            return handleNotFoundException(clientNotFoundException, headers, status, request);
         } else if (ex instanceof AccountNotFoundException accountNotFoundException) {
             HttpStatus status = HttpStatus.BAD_REQUEST;
+            return handleException(accountNotFoundException, headers, status, request);
 
-            return handleNotFoundException(accountNotFoundException, headers, status, request);
         } else if (ex instanceof AccountAlreadyExistException accountException) {
             HttpStatus status = HttpStatus.BAD_REQUEST;
+            return handleException(accountException, headers, status, request);
 
-            return handleNotFoundException(accountException, headers, status, request);
         } else if (ex instanceof ClientAlreadyExistException accountException) {
             HttpStatus status = HttpStatus.BAD_REQUEST;
+            return handleException(accountException, headers, status, request);
 
-            return handleNotFoundException(accountException, headers, status, request);
+        } else if (ex instanceof AccountNumberQuantityException quantityException) {
+            HttpStatus status = HttpStatus.FORBIDDEN; // 403 Forbidden
+            return handleException(quantityException, headers, status, request);
+
         } else {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Unknown exception type: {}", ex.getClass().getName());
@@ -72,22 +74,22 @@ public class GlobalExceptionHandler {
      * @param status  The selected response status
      * @return a {@code ResponseEntity} instance
      */
-    protected ResponseEntity<ErrorDTO> handleNotFoundException(Exception ex,
-                                                               HttpHeaders headers,
-                                                               HttpStatus status,
-                                                               WebRequest request) {
+    protected ResponseEntity<ErrorDTO> handleException(Exception ex,
+                                                       HttpHeaders headers,
+                                                       HttpStatus status,
+                                                       WebRequest request) {
 //        List<String> errors = Collections.singletonList(ex.getMessage());
         return handleExceptionInternal(ex, new ErrorDTO(ex.getMessage()), headers, status, request);
     }
 
-    /**
-     * Customize the response for AccountNotFoundException.
-     *
-     * @param ex The exception
-     * @param headers The headers to be written to the response
-     * @param status The selected response status
-     * @return a {@code ResponseEntity} instance
-     */
+/**
+ * Customize the response for AccountNotFoundException.
+ *
+ * @param ex The exception
+ * @param headers The headers to be written to the response
+ * @param status The selected response status
+ * @return a {@code ResponseEntity} instance
+ */
 //    protected ResponseEntity<ApiError> handleContentNotAllowedException(AccountNotFoundException ex,
 //                                                                        HttpHeaders headers,
 //                                                                        HttpStatus status,
@@ -108,11 +110,11 @@ public class GlobalExceptionHandler {
      * request attribute and creates a {@link ResponseEntity} from the given
      * errorMessage, headers, and status.
      *
-     * @param ex      The exception
-     * @param errorMessage    The errorMessage for the response
-     * @param headers The headers for the response
-     * @param status  The response status
-     * @param request The current request
+     * @param ex           The exception
+     * @param errorMessage The errorMessage for the response
+     * @param headers      The headers for the response
+     * @param status       The response status
+     * @param request      The current request
      */
     protected ResponseEntity<ErrorDTO> handleExceptionInternal(Exception ex,
                                                                @Nullable ErrorDTO errorMessage,
