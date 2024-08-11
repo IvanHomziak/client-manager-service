@@ -17,4 +17,6 @@ public interface AccountService {
     AccountResponseDTO updateAccount(AccountRequestDTO accountRequestDTO);
 
     List<AccountInfoDTO> findAllAccounts();
+
+    List<AccountResponseDTO> findAllAccountsByClientUUID(String uuid);
 }

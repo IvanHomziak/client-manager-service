@@ -45,7 +45,8 @@ public class AccountServiceImpl implements AccountService {
             throw new ClientNotFoundException("Client not found");
         }
 
-        List<Account> accountNumberSize = this.accountRepository.findAccountsByAccountType(accountRequestDTO.getAccountType());
+        List<Account> accountNumberSize = this.accountRepository.findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), client.get().getUUID());
+
         Account theAccount = mapper.accountRequestDtoToAccount(accountRequestDTO);
 
         if (accountNumberSize.size() >= maxAccountNumberOfCheckingType) {
@@ -112,6 +113,16 @@ public class AccountServiceImpl implements AccountService {
             accountInfoDTOList.add(mapper.accountToAccountInfoDto(account));
         }
         return accountInfoDTOList;
+    }
+
+    @Override
+    public List<AccountResponseDTO> findAllAccountsByClientUUID(String uuid) {
+        List<Account> accountList = this.accountRepository.findAccountsByClientUUID(uuid);
+        List<AccountResponseDTO> accountResponseDTOList = new ArrayList<>();
+        for (Account account : accountList) {
+            accountResponseDTOList.add(mapper.accountToAccountResponseDto(account));
+        }
+        return accountResponseDTOList;
     }
 
     @Override
