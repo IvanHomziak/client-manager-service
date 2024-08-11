@@ -26,6 +26,11 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.FOUND).body(this.accountService.findAccountByUuid(uuid));
     }
 
+    @GetMapping("/account/list/{uuid}")
+    public ResponseEntity<List<AccountResponseDTO>> getClientAccounts(@PathVariable String uuid) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(this.accountService.findAllAccountsByClientUUID(uuid));
+    }
+
     @PostMapping("/account")
     public ResponseEntity<AccountResponseDTO> createCheckingAccount(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.accountService.createCheckingAccount(accountRequestDTO));
