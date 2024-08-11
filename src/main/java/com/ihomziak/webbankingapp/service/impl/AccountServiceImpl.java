@@ -9,6 +9,7 @@ import com.ihomziak.webbankingapp.dto.AccountResponseDTO;
 import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.entity.Client;
 import com.ihomziak.webbankingapp.exception.AccountNotFoundException;
+import com.ihomziak.webbankingapp.exception.AccountNumberQuantityException;
 import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
 import com.ihomziak.webbankingapp.mapper.MapStructMapper;
 import com.ihomziak.webbankingapp.service.AccountService;
@@ -37,18 +38,22 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponseDTO createCheckingAccount(AccountRequestDTO accountRequestDTO) {
+        int maxAccountNumberOfCheckingType = 2;
         Optional<Client> client = this.clientRepository.findClientByUUID(accountRequestDTO.getClientUUID());
 
         if (client.isEmpty()) {
             throw new ClientNotFoundException("Client not found");
         }
 
-        Optional<Account> accountInDB = this.accountRepository.findAccountByAccountNumber(accountRequestDTO.getAccountNumber()).stream().findAny();
+        List<Account> accountNumberSize = this.accountRepository.findAccountsByAccountType(accountRequestDTO.getAccountType());
         Account theAccount = mapper.accountRequestDtoToAccount(accountRequestDTO);
 
-        while (accountInDB.stream().anyMatch(accountNumber -> accountNumber.getAccountNumber().equals(theAccount.getAccountNumber()))) {
+        if (accountNumberSize.size() >= maxAccountNumberOfCheckingType) {
+            throw new AccountNumberQuantityException("Client reach max account number of type: " + accountRequestDTO.getAccountType());
+        } else {
             theAccount.setAccountNumber(AccountNumberGenerator.generateBankAccountNumber());
         }
+
         theAccount.setClient(client.get());
         theAccount.setCreatedAt(LocalDateTime.now());
 
