@@ -23,14 +23,18 @@ services:
     container_name: mysqldb-webbanking-app-container
     image: mysql:8.0.36
     restart: always
+    command: --init-file /mysql_scripts/create_client_and_account_tables.sql # this command will create database
     volumes:
       - /Users/ivanhomziak/IdeaProjects/webbankingapp/db_data/db:/var/lib/mysql
+      - ./create_client_and_account_tables.sql:/mysql_scripts/create_client_and_account_tables.sql # path to script which should create database
     ports:
       - "3307:3306"
     environment:
-      MYSQL_DATABASE: webbanking-db
+      MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
-#      MYSQL_PASSWORD: student
+      MYSQL_DATABASE: webbanking-db
+      MYSQL_USER: student
+      MYSQL_PASSWORD: student
 #      MYSQL_HOST: localhost
       MYSQL_PORT: 3307:3306
 
