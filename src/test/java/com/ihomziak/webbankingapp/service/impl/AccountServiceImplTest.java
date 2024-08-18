@@ -9,7 +9,10 @@ import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.entity.Client;
 import com.ihomziak.webbankingapp.enums.AccountType;
 import com.ihomziak.webbankingapp.errors.GlobalExceptionHandler;
+import com.ihomziak.webbankingapp.exception.AccountNumberQuantityException;
 import com.ihomziak.webbankingapp.mapper.MapStructMapper;
+import com.ihomziak.webbankingapp.service.AccountService;
+import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +44,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -62,37 +66,133 @@ class AccountServiceImplTest {
     @InjectMocks
     private AccountServiceImpl accountService;
 
+    private AccountRequestDTO accountRequestDTO;
+    private AccountResponseDTO accountResponseDTO;
+    private ClientRequestDTO clientRequestDTO;
+    private ClientResponseDTO clientResponseDTO;
+    private AccountInfoDTO accountInfoDTO;
+    private Client client;
+    private Account account;
+
+    private List<Account> accountList;
+    private String clientUuid;
+    private String accountNumber;
+
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void setup() {
+        clientUuid = "206625ce-3ee7-4174-8f92-4bdc41c18274";
+        accountNumber = "165445000023211234";
+
+        accountRequestDTO = new AccountRequestDTO();
+        accountRequestDTO.setAccountNumber(accountNumber);
+        accountRequestDTO.setAccountType(AccountType.CHECKING);
+        accountRequestDTO.setBalance(1000);
+        accountRequestDTO.setClientUUID(clientUuid);
+
+        AccountHolderDTO accountHolder = new AccountHolderDTO();
+        accountHolder.setFirstName("John");
+        accountHolder.setLastName("Doe");
+        accountHolder.setUUID(clientUuid);
+
+        accountResponseDTO = new AccountResponseDTO();
+        accountResponseDTO.setAccountId(1);
+        accountResponseDTO.setAccountHolderDTO(accountHolder);
+        accountResponseDTO.setAccountNumber(accountRequestDTO.getAccountNumber());
+        accountResponseDTO.setAccountType(accountRequestDTO.getAccountType());
+        accountResponseDTO.setBalance(accountRequestDTO.getBalance());
+        accountResponseDTO.setUUID(clientUuid);
+        accountResponseDTO.setCreatedAt(null);
+        accountResponseDTO.setLastUpdated(null);
+
+        clientRequestDTO = new ClientRequestDTO();
+        clientRequestDTO.setFirstName("John");
+        clientRequestDTO.setLastName("Doe");
+        clientRequestDTO.setTaxNumber("123456789");
+        clientRequestDTO.setDateOfBirth("07/07/1992");
+        clientRequestDTO.setEmail("john.doe@example.com");
+        clientRequestDTO.setPhoneNumber("123-456-7890");
+        clientRequestDTO.setAddress("123 Main St");
+
+
+        account = new Account();
+        account = mapper.accountRequestDtoToAccount(accountRequestDTO);
+
+        client = new Client();
+        client.setFirstName("John");
+        client.setLastName("Doe");
+        client.setTaxNumber("123456789");
+        client.setDateOfBirth("07/07/1992");
+        client.setEmail("john.doe@example.com");
+        client.setPhoneNumber("123-456-7890");
+        client.setAddress("123 Main St");
+        client.setUUID(clientUuid);
+        client.setCreatedAt(null);
+        client.setUpdatedAt(null);
+
+        accountInfoDTO = new AccountInfoDTO();
+        accountInfoDTO = mapper.accountToAccountInfoDto(account);
+
     }
 
     @Test
-    void testCreateCheckingAccount_Success() {
-        // Arrange
-        String clientUUID = "client-uuid";
-        AccountRequestDTO requestDTO = new AccountRequestDTO();
-        requestDTO.setClientUUID(clientUUID);
-        requestDTO.setAccountNumber("123456");
+    public void testCreateCheckingAccount() {
+        accountList = new ArrayList<>();
+        accountList.add(account);
 
-        Client client = new Client();
-        Account account = new Account();
-        AccountResponseDTO responseDTO = new AccountResponseDTO();
+        when(clientRepository.findClientByUUID(accountRequestDTO.getClientUUID()))
+                .thenReturn(Optional.ofNullable(client));
+        when(accountRepository.findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID()))
+                .thenReturn(accountList);
+        when(mapper.accountRequestDtoToAccount(accountRequestDTO))
+                .thenReturn(account);
+        when(mapper.accountToAccountResponseDto(account))
+                .thenReturn(accountResponseDTO);
 
-        when(clientRepository.findClientByUUID(clientUUID)).thenReturn(Optional.of(client));
+//        assertDoesNotThrow(() ->
+//                accountService.createCheckingAccount(accountRequestDTO)
+//        );
+//
+//        assertDoesNotThrow(() ->
+//                accountRepository.findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID())
+//        );
 
-        when(mapper.accountRequestDtoToAccount(requestDTO)).thenReturn(account);
+        verify(clientRepository, times(1)).findClientByUUID(accountRequestDTO.getClientUUID());
+        verify(accountRepository, times(1)).findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID());
 
-//        when(accountRepository.findAccountByAccountNumber(anyString())).thenReturn(new ArrayList<>());
-//        when(mapper.accountToAccountResponseDto(account)).thenReturn(responseDTO);
-//        when(mapper.clientToAccountHolderDto(client)).thenReturn(new AccountHolderDTO());
+//        verify(accountRepository, never()).findAccountByAccountNumber(anyString());
+//        verify(accountRepository, never()).save(any(Account.class));
+    }
 
-        // Act
-        AccountResponseDTO result = accountService.createCheckingAccount(requestDTO);
+    @Test
+    public void testCreateCheckingAccount_ClientNotFound() {
+        when(clientRepository.findClientByUUID(accountRequestDTO.getClientUUID()))
+                .thenReturn(Optional.empty());
 
-        // Assert
-        assertNotNull(result);
-        verify(accountRepository).save(account);
-        verify(mapper).accountToAccountResponseDto(account);
+        assertThrows(ClientNotFoundException.class, () ->
+                accountService.createCheckingAccount(accountRequestDTO)
+        );
+
+        verify(clientRepository, times(1)).findClientByUUID(accountRequestDTO.getClientUUID());
+        verify(accountRepository, never()).findAccountByAccountNumber(anyString());
+        verify(accountRepository, never()).save(any(Account.class));
+    }
+
+    @Test
+    public void testCreateCheckingAccount_LimitOfBankAccountsExceeded_SameAccountType() {
+        accountList = new ArrayList<>();
+        accountList.add(account);
+        accountList.add(account);
+        accountList.add(account);
+
+        when(clientRepository.findClientByUUID(accountRequestDTO.getClientUUID()))
+                .thenReturn(Optional.ofNullable(client));
+        when(accountRepository.findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID()))
+                .thenReturn(accountList);
+
+        assertThrows(AccountNumberQuantityException.class, () ->
+                accountService.createCheckingAccount(accountRequestDTO)
+        );
+
+        verify(accountRepository, times(1)).findAccountsByAccountType(accountRequestDTO.getAccountType());
     }
 }
