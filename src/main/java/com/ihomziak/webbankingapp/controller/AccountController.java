@@ -50,4 +50,5 @@ public class AccountController {
     public ResponseEntity<List<AccountInfoDTO>> getAccounts() {
         return ResponseEntity.status(HttpStatus.FOUND).body(this.accountService.findAllAccounts());
     }
+
 }
