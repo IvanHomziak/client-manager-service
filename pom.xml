@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ihomziak</groupId>
-	<artifactId>webbankingapp</artifactId>
+	<artifactId>client-manager-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>webbankingapp</name>
 	<description>Demo project for Spring Boot</description>

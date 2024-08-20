@@ -8,45 +8,23 @@ import com.ihomziak.webbankingapp.dto.AccountResponseDTO;
 import com.ihomziak.webbankingapp.entity.Account;
 import com.ihomziak.webbankingapp.entity.Client;
 import com.ihomziak.webbankingapp.enums.AccountType;
-import com.ihomziak.webbankingapp.errors.GlobalExceptionHandler;
 import com.ihomziak.webbankingapp.exception.AccountNumberQuantityException;
 import com.ihomziak.webbankingapp.mapper.MapStructMapper;
-import com.ihomziak.webbankingapp.service.AccountService;
-import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import com.ihomziak.webbankingapp.dao.AccountRepository;
-import com.ihomziak.webbankingapp.dao.ClientRepository;
 import com.ihomziak.webbankingapp.dto.*;
-import com.ihomziak.webbankingapp.entity.Account;
-import com.ihomziak.webbankingapp.entity.Client;
-import com.ihomziak.webbankingapp.exception.AccountNotFoundException;
 import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
-import com.ihomziak.webbankingapp.mapper.MapStructMapper;
-import com.ihomziak.webbankingapp.service.impl.AccountServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -139,38 +117,21 @@ class AccountServiceImplTest {
         accountList = new ArrayList<>();
         accountList.add(account);
 
-        when(clientRepository.findClientByUUID(accountRequestDTO.getClientUUID()))
-                .thenReturn(Optional.ofNullable(client));
-        when(accountRepository.findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID()))
-                .thenReturn(accountList);
-        when(mapper.accountRequestDtoToAccount(accountRequestDTO))
-                .thenReturn(account);
-        when(mapper.accountToAccountResponseDto(account))
-                .thenReturn(accountResponseDTO);
+        when(clientRepository.findClientByUUID(accountRequestDTO.getClientUUID())).thenReturn(Optional.ofNullable(client));
+        when(accountRepository.findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID())).thenReturn(accountList);
+        when(mapper.accountRequestDtoToAccount(accountRequestDTO)).thenReturn(account);
+        when(mapper.accountToAccountResponseDto(account)).thenReturn(accountResponseDTO);
 
-//        assertDoesNotThrow(() ->
-//                accountService.createCheckingAccount(accountRequestDTO)
-//        );
-//
-//        assertDoesNotThrow(() ->
-//                accountRepository.findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID())
-//        );
 
         verify(clientRepository, times(1)).findClientByUUID(accountRequestDTO.getClientUUID());
         verify(accountRepository, times(1)).findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID());
-
-//        verify(accountRepository, never()).findAccountByAccountNumber(anyString());
-//        verify(accountRepository, never()).save(any(Account.class));
     }
 
     @Test
     public void testCreateCheckingAccount_ClientNotFound() {
-        when(clientRepository.findClientByUUID(accountRequestDTO.getClientUUID()))
-                .thenReturn(Optional.empty());
+        when(clientRepository.findClientByUUID(accountRequestDTO.getClientUUID())).thenReturn(Optional.empty());
 
-        assertThrows(ClientNotFoundException.class, () ->
-                accountService.createCheckingAccount(accountRequestDTO)
-        );
+        assertThrows(ClientNotFoundException.class, () -> accountService.createCheckingAccount(accountRequestDTO));
 
         verify(clientRepository, times(1)).findClientByUUID(accountRequestDTO.getClientUUID());
         verify(accountRepository, never()).findAccountByAccountNumber(anyString());
@@ -184,14 +145,10 @@ class AccountServiceImplTest {
         accountList.add(account);
         accountList.add(account);
 
-        when(clientRepository.findClientByUUID(accountRequestDTO.getClientUUID()))
-                .thenReturn(Optional.ofNullable(client));
-        when(accountRepository.findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID()))
-                .thenReturn(accountList);
+        when(clientRepository.findClientByUUID(accountRequestDTO.getClientUUID())).thenReturn(Optional.ofNullable(client));
+        when(accountRepository.findAccountsByAccountTypeAndClientUUID(accountRequestDTO.getAccountType(), accountRequestDTO.getClientUUID())).thenReturn(accountList);
 
-        assertThrows(AccountNumberQuantityException.class, () ->
-                accountService.createCheckingAccount(accountRequestDTO)
-        );
+        assertThrows(AccountNumberQuantityException.class, () -> accountService.createCheckingAccount(accountRequestDTO));
 
         verify(accountRepository, times(1)).findAccountsByAccountType(accountRequestDTO.getAccountType());
     }
