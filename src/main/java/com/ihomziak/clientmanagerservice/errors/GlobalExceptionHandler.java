@@ -78,30 +78,8 @@ public class GlobalExceptionHandler {
                                                        HttpHeaders headers,
                                                        HttpStatus status,
                                                        WebRequest request) {
-//        List<String> errors = Collections.singletonList(ex.getMessage());
         return handleExceptionInternal(ex, new ErrorDTO(ex.getMessage()), headers, status, request);
     }
-
-/**
- * Customize the response for AccountNotFoundException.
- *
- * @param ex The exception
- * @param headers The headers to be written to the response
- * @param status The selected response status
- * @return a {@code ResponseEntity} instance
- */
-//    protected ResponseEntity<ApiError> handleContentNotAllowedException(AccountNotFoundException ex,
-//                                                                        HttpHeaders headers,
-//                                                                        HttpStatus status,
-//                                                                        WebRequest request) {
-//        List<String> errorMessages = ex.getErrors()
-//                .stream()
-//                .map(contentError -> contentError.getObjectName() + " " + contentError.getDefaultMessage())
-//                .collect(Collectors.toList());
-//
-//        return handleExceptionInternal(ex, new ApiError(errorMessages), headers, status, request);
-//    }
-
 
     /**
      * A single place to customize the response errorMessage of all Exception types.
