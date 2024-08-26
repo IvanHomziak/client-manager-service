@@ -1,4 +1,4 @@
-package com.ihomziak.clientmanagerservice.errors;
+package com.ihomziak.clientmanagerservice.exceptionhandler;
 
 import com.ihomziak.clientmanagerservice.dto.ErrorDTO;
 import com.ihomziak.clientmanagerservice.exception.*;

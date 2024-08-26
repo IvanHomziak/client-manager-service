@@ -9,7 +9,7 @@ import com.ihomziak.clientmanagerservice.dto.AccountInfoDTO;
 import com.ihomziak.clientmanagerservice.dto.AccountRequestDTO;
 import com.ihomziak.clientmanagerservice.dto.AccountResponseDTO;
 import com.ihomziak.clientmanagerservice.enums.AccountType;
-import com.ihomziak.clientmanagerservice.errors.GlobalExceptionHandler;
+import com.ihomziak.clientmanagerservice.exceptionhandler.GlobalExceptionHandler;
 import com.ihomziak.clientmanagerservice.exception.AccountNotFoundException;
 import com.ihomziak.clientmanagerservice.exception.ClientNotFoundException;
 import com.ihomziak.clientmanagerservice.service.AccountService;

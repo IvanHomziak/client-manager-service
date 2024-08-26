@@ -7,7 +7,7 @@ import com.ihomziak.clientmanagerservice.controller.ClientController;
 import com.ihomziak.clientmanagerservice.dto.ClientRequestDTO;
 import com.ihomziak.clientmanagerservice.dto.ClientResponseDTO;
 import com.ihomziak.clientmanagerservice.dto.ClientsInfoDTO;
-import com.ihomziak.clientmanagerservice.errors.GlobalExceptionHandler;
+import com.ihomziak.clientmanagerservice.exceptionhandler.GlobalExceptionHandler;
 import com.ihomziak.clientmanagerservice.exception.ClientNotFoundException;
 import com.ihomziak.clientmanagerservice.service.ClientService;
 import org.junit.jupiter.api.Test;
