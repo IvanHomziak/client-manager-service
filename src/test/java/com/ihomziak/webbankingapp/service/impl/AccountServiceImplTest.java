@@ -1,23 +1,21 @@
 package com.ihomziak.webbankingapp.service.impl;
 
-import com.ihomziak.webbankingapp.dao.AccountRepository;
-import com.ihomziak.webbankingapp.dao.ClientRepository;
-import com.ihomziak.webbankingapp.dto.AccountHolderDTO;
-import com.ihomziak.webbankingapp.dto.AccountRequestDTO;
-import com.ihomziak.webbankingapp.dto.AccountResponseDTO;
-import com.ihomziak.webbankingapp.entity.Account;
-import com.ihomziak.webbankingapp.entity.Client;
-import com.ihomziak.webbankingapp.enums.AccountType;
-import com.ihomziak.webbankingapp.exception.AccountNumberQuantityException;
-import com.ihomziak.webbankingapp.mapper.MapStructMapper;
+import com.ihomziak.clientmanagerservice.dao.AccountRepository;
+import com.ihomziak.clientmanagerservice.dao.ClientRepository;
+import com.ihomziak.clientmanagerservice.dto.*;
+import com.ihomziak.clientmanagerservice.entity.Account;
+import com.ihomziak.clientmanagerservice.entity.Client;
+import com.ihomziak.clientmanagerservice.enums.AccountType;
+import com.ihomziak.clientmanagerservice.exception.AccountNumberQuantityException;
+import com.ihomziak.clientmanagerservice.mapper.MapStructMapper;
+import com.ihomziak.clientmanagerservice.service.impl.AccountServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.ihomziak.webbankingapp.dto.*;
-import com.ihomziak.webbankingapp.exception.ClientNotFoundException;
+import com.ihomziak.clientmanagerservice.exception.ClientNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,14 +4,14 @@ version: '3.1'
 services:
   # Spring Boo service configuration
   springboot-app:
-    container_name: webbanking-app
+    container_name: client-manager-service
     restart: always
     image: springboot-app
     build: .
     ports:
       - "9090:8080"
     environment:
-      MYSQL_HOST: mysqldb-webbanking-app-container # localhost is == container_name: mysqldb-webbanking-app-container
+      MYSQL_HOST: mysqldb-client-manager-service-container # localhost is == db.container_name: mysqldb-webbanking-app-container
       MYSQL_PORT: 3306
       MYSQL_USER: root
       MYSQL_PASSWORD: root
@@ -20,12 +20,12 @@ services:
 
 # DataBase service configuration
   db:
-    container_name: mysqldb-webbanking-app-container
+    container_name: mysqldb-client-manager-service-container
     image: mysql:8.0.36
     restart: always
     command: --init-file /mysql_scripts/create_client_and_account_tables.sql # this command will create database
     volumes:
-      - /Users/ivanhomziak/IdeaProjects/webbankingapp/db_data/db:/var/lib/mysql
+      - /Users/ivanhomziak/IdeaProjects/client-manager-service/db_data/db:/var/lib/mysql
       - ./create_client_and_account_tables.sql:/mysql_scripts/create_client_and_account_tables.sql # path to script which should create database
     ports:
       - "3307:3306"
