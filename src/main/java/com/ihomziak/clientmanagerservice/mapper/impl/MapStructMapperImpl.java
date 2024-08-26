@@ -1,8 +1,9 @@
-package com.ihomziak.clientmanagerservice.mapper;
+package com.ihomziak.clientmanagerservice.mapper.impl;
 
 import com.ihomziak.clientmanagerservice.dto.*;
 import com.ihomziak.clientmanagerservice.entity.Account;
 import com.ihomziak.clientmanagerservice.entity.Client;
+import com.ihomziak.clientmanagerservice.mapper.MapStructMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
