@@ -9,7 +9,7 @@ import com.ihomziak.clientmanagerservice.entity.Account;
 import com.ihomziak.clientmanagerservice.entity.Client;
 import com.ihomziak.clientmanagerservice.exception.ClientAlreadyExistException;
 import com.ihomziak.clientmanagerservice.exception.ClientNotFoundException;
-import com.ihomziak.clientmanagerservice.mapper.MapStructMapperImpl;
+import com.ihomziak.clientmanagerservice.mapper.impl.MapStructMapperImpl;
 import com.ihomziak.clientmanagerservice.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
