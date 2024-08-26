@@ -1,8 +1,8 @@
 
 -- Drop the client table if it exists
-DROP TABLE IF EXISTS webbankingapp.client;
+DROP TABLE IF EXISTS client_db.client;
 -- Drop the account table if it exists
-DROP TABLE IF EXISTS webbankingapp.account;
+DROP TABLE IF EXISTS client_db.account;
 -- Create the client table with a unique constraint on uuid
 CREATE TABLE client (
     client_id BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
@@ -34,6 +34,6 @@ CREATE TABLE account (
 );
 
 -- Select all records from the client table
-SELECT * FROM webbankingapp.client;
+SELECT * FROM client_db.client;
 
 

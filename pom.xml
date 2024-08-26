@@ -99,6 +99,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>springboot-mysql-docker</finalName>
+		<finalName>client-manager-service-docker</finalName>
 	</build>
 </project>

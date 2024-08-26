@@ -1,8 +1,7 @@
 FROM openjdk:17-jdk
 
-#COPY target/webbankingapp.jar .
-ADD target/springboot-mysql-docker.jar springboot-mysql-docker.jar
+ADD target/client-manager-service-docker.jar client-manager-service-docker.jar
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "springboot-mysql-docker.jar"]
+ENTRYPOINT ["java", "-jar", "client-manager-service-docker.jar"]
 

@@ -10,12 +10,8 @@ public enum AccountType {
         this.accountType = accountType;
     }
 
-    public String getAccountType() {
-        return this.accountType;
-    }
-
     @Override
     public String toString() {
-        return getAccountType();
+        return this.accountType;
     }
 }
