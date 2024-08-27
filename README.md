@@ -52,14 +52,14 @@ Ensure you have Maven installed.
 The API will be available at http://localhost:8080/api.
 
 ## Project Structure
-com.ihomziak.webbankingapp.controller: Contains REST controllers for handling client and account-related requests.
-com.ihomziak.webbankingapp.service: Business logic for managing clients and accounts.
-com.ihomziak.webbankingapp.dao: Interfaces for database operations, using Spring Data JPA.
-com.ihomziak.webbankingapp.dto: Data Transfer Objects (DTOs) for transferring data between layers.
-com.ihomziak.webbankingapp.entity: JPA entities representing the database tables.
-com.ihomziak.webbankingapp.enums: Enumerations used across the application.
-com.ihomziak.webbankingapp.exception: Custom exceptions for handling errors.
-com.ihomziak.webbankingapp.util: Utility classes for various functions.
+com.ihomziak.clientmanagerservice.controller: Contains REST controllers for handling client and account-related requests.
+com.ihomziak.clientmanagerservice.service: Business logic for managing clients and accounts.
+com.ihomziak.clientmanagerservice.dao: Interfaces for database operations, using Spring Data JPA.
+com.ihomziak.clientmanagerservice.dto: Data Transfer Objects (DTOs) for transferring data between layers.
+com.ihomziak.clientmanagerservice.entity: JPA entities representing the database tables.
+com.ihomziak.clientmanagerservice.enums: Enumerations used across the application.
+com.ihomziak.clientmanagerservice.exception: Custom exceptions for handling errors.
+com.ihomziak.clientmanagerservice.util: Utility classes for various functions.
 
 ## API Endpoints
 **Account Controller**

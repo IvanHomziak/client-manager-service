@@ -1,4 +1,4 @@
-package com.ihomziak.webbankingapp.service.impl;
+package com.ihomziak.clientmanagerservice.service.impl;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

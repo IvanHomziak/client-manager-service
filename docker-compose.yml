@@ -4,7 +4,7 @@ version: '3.1'
 services:
   # Spring Boo service configuration
   springboot-app:
-    container_name: client-manager-service
+    container_name: client-manager-service-container
     restart: always
     image: springboot-app
     build: .
@@ -32,7 +32,7 @@ services:
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: client_db
+      MYSQL_DATABASE: clients_db
       MYSQL_USER: student
       MYSQL_PASSWORD: student
 #      MYSQL_HOST: localhost

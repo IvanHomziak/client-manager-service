@@ -1,4 +1,4 @@
-package com.ihomziak.webbankingapp.service.impl;
+package com.ihomziak.clientmanagerservice.service.impl;
 
 import com.ihomziak.clientmanagerservice.dao.AccountRepository;
 import com.ihomziak.clientmanagerservice.dao.ClientRepository;
@@ -8,7 +8,6 @@ import com.ihomziak.clientmanagerservice.entity.Client;
 import com.ihomziak.clientmanagerservice.enums.AccountType;
 import com.ihomziak.clientmanagerservice.exception.AccountNumberQuantityException;
 import com.ihomziak.clientmanagerservice.mapper.MapStructMapper;
-import com.ihomziak.clientmanagerservice.service.impl.AccountServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
