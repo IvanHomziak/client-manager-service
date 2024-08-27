@@ -25,7 +25,7 @@ services:
     restart: always
     command: --init-file /mysql_scripts/create_client_and_account_tables.sql # this command will create database
     volumes:
-      - /Users/ivanhomziak/IdeaProjects/client-manager-service/db_data/db:/var/lib/mysql
+      - /Users/username.../IdeaProjects/client-manager-service/db_data/db:/var/lib/mysql
       - ./create_client_and_account_tables.sql:/mysql_scripts/create_client_and_account_tables.sql # path to script which should create database
     ports:
       - "3307:3306"
