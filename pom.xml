@@ -113,6 +113,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>client-manager-service-docker</finalName>
+        <finalName>client-manager-service</finalName>
     </build>
 </project>

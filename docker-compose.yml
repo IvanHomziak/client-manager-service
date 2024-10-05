@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   mysqldb:
-    container_name: mysqldb-cms
+    container_name: mysqldb-cms-c
     image: mysql
     restart: always
     environment:
@@ -31,6 +31,8 @@ services:
     restart: always
     ports:
       - "9090:9090"
+    env_file:
+          - .env.docker
     networks:
       - springapimysql-net
     depends_on:
