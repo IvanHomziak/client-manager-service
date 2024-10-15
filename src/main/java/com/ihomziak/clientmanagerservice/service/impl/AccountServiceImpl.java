@@ -1,12 +1,12 @@
 package com.ihomziak.clientmanagerservice.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ihomziak.clientmanagerservice.dao.AccountRepository;
 import com.ihomziak.clientmanagerservice.dao.ClientRepository;
+import com.ihomziak.clientmanagerservice.dto.*;
+import com.ihomziak.clientmanagerservice.entity.Transaction;
 import com.ihomziak.clientmanagerservice.service.AccountService;
-import com.ihomziak.clientmanagerservice.dto.AccountHolderDTO;
-import com.ihomziak.clientmanagerservice.dto.AccountInfoDTO;
-import com.ihomziak.clientmanagerservice.dto.AccountRequestDTO;
-import com.ihomziak.clientmanagerservice.dto.AccountResponseDTO;
 import com.ihomziak.clientmanagerservice.entity.Account;
 import com.ihomziak.clientmanagerservice.entity.Client;
 import com.ihomziak.clientmanagerservice.exception.AccountNotFoundException;
@@ -14,6 +14,7 @@ import com.ihomziak.clientmanagerservice.exception.AccountNumberQuantityExceptio
 import com.ihomziak.clientmanagerservice.exception.ClientNotFoundException;
 import com.ihomziak.clientmanagerservice.mapper.MapStructMapper;
 import com.ihomziak.clientmanagerservice.util.AccountNumberGenerator;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +29,14 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final ClientRepository clientRepository;
     private final MapStructMapper mapper;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, ClientRepository clientRepository, MapStructMapper mapper) {
+    public AccountServiceImpl(AccountRepository accountRepository, ClientRepository clientRepository, MapStructMapper mapper, ObjectMapper objectMapper) {
         this.accountRepository = accountRepository;
         this.clientRepository = clientRepository;
         this.mapper = mapper;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -132,5 +135,31 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountNotFoundException("Account not exist. UUID: " + uuid);
         }
         return mapper.accountToAccountInfoDto(account.get());
+    }
+
+    public void processTransactionEvent(ConsumerRecord<Integer, String> consumerRecord) throws JsonProcessingException {
+
+        Transaction transaction = objectMapper.readValue(consumerRecord.value(), Transaction.class);
+
+        Optional<Account> sender = accountRepository.findAccountByUUID(transaction.getSenderUuid());
+
+        if (sender.isEmpty()) {
+            throw new AccountNotFoundException("Sender account not found");
+        }
+
+        Optional<Account> receiver = accountRepository.findAccountByUUID(transaction.getReceiverUuid());
+
+        if (receiver.isEmpty()) {
+            throw new AccountNotFoundException("Receiver account not found");
+        }
+
+        Account senderAccount = sender.get();
+        Account receiverAccount = receiver.get();
+
+        senderAccount.setBalance(senderAccount.getBalance() - transaction.getAmount());
+        receiverAccount.setBalance(receiverAccount.getBalance() + transaction.getAmount());
+
+        accountRepository.save(senderAccount);
+        accountRepository.save(receiverAccount);
     }
 }
