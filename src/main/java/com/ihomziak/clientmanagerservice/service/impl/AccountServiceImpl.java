@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ihomziak.clientmanagerservice.dao.AccountRepository;
 import com.ihomziak.clientmanagerservice.dao.ClientRepository;
 import com.ihomziak.clientmanagerservice.dto.*;
-import com.ihomziak.clientmanagerservice.entity.Transaction;
+import com.ihomziak.clientmanagerservice.dto.TransactionRequestDTO;
 import com.ihomziak.clientmanagerservice.service.AccountService;
 import com.ihomziak.clientmanagerservice.entity.Account;
 import com.ihomziak.clientmanagerservice.entity.Client;
@@ -139,15 +139,15 @@ public class AccountServiceImpl implements AccountService {
 
     public void processTransactionEvent(ConsumerRecord<Integer, String> consumerRecord) throws JsonProcessingException {
 
-        Transaction transaction = objectMapper.readValue(consumerRecord.value(), Transaction.class);
+        TransactionRequestDTO transactionRequestDTO = objectMapper.readValue(consumerRecord.value(), TransactionRequestDTO.class);
 
-        Optional<Account> sender = accountRepository.findAccountByUUID(transaction.getSenderUuid());
+        Optional<Account> sender = accountRepository.findAccountByUUID(transactionRequestDTO.getSenderUuid());
 
         if (sender.isEmpty()) {
             throw new AccountNotFoundException("Sender account not found");
         }
 
-        Optional<Account> receiver = accountRepository.findAccountByUUID(transaction.getReceiverUuid());
+        Optional<Account> receiver = accountRepository.findAccountByUUID(transactionRequestDTO.getReceiverUuid());
 
         if (receiver.isEmpty()) {
             throw new AccountNotFoundException("Receiver account not found");
@@ -156,8 +156,8 @@ public class AccountServiceImpl implements AccountService {
         Account senderAccount = sender.get();
         Account receiverAccount = receiver.get();
 
-        senderAccount.setBalance(senderAccount.getBalance() - transaction.getAmount());
-        receiverAccount.setBalance(receiverAccount.getBalance() + transaction.getAmount());
+        senderAccount.setBalance(senderAccount.getBalance() - transactionRequestDTO.getAmount());
+        receiverAccount.setBalance(receiverAccount.getBalance() + transactionRequestDTO.getAmount());
 
         accountRepository.save(senderAccount);
         accountRepository.save(receiverAccount);
