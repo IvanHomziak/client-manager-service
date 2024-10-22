@@ -1,7 +1,6 @@
 package com.ihomziak.clientmanagerservice.dto;
 
 import com.ihomziak.clientmanagerservice.enums.TransactionStatus;
-import com.ihomziak.clientmanagerservice.enums.TransactionType;
 import lombok.*;
 
 @Getter
@@ -9,13 +8,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TransactionRequestDTO {
+public class TransactionResponseDTO {
 
     private Integer transactionEventId;
     private String transactionUuid;
-    private String senderUuid;
-    private String receiverUuid;
-    private Double amount;
     private TransactionStatus transactionStatus;
-    private TransactionType transactionType;
+    private String errorMessage;
+    private Double updatedSenderBalance;
+    private Double updatedReceiverBalance;
 }

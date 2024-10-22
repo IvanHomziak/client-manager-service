@@ -12,10 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class TransactionEventConsumer {
 
-    @Autowired
-    private AccountServiceImpl accountService;
+    private final AccountServiceImpl accountService;
 
-    @KafkaListener(topics = {"transfer-transactions-topic"})
+    @Autowired
+    public TransactionEventConsumer(AccountServiceImpl accountService) {
+        this.accountService = accountService;
+    }
+
+    @KafkaListener(topics = {"${spring.kafka.topic.transfer-transactions-name}"})
     public void onMessage(ConsumerRecord<Integer, String> consumerRecord) throws JsonProcessingException {
         log.info("Received ConsumerRecord: {}", consumerRecord.value());
         accountService.processTransactionEvent(consumerRecord);

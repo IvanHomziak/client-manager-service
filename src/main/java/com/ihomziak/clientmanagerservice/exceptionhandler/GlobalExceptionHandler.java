@@ -56,6 +56,10 @@ public class GlobalExceptionHandler {
             HttpStatus status = HttpStatus.FORBIDDEN; // 403 Forbidden
             return handleException(quantityException, headers, status, request);
 
+        } else if (ex instanceof NonSufficientFundsException balanceException) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+            return handleException(balanceException, headers, status, request);
+
         } else {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Unknown exception type: {}", ex.getClass().getName());

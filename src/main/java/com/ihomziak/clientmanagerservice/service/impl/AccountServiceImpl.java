@@ -6,6 +6,8 @@ import com.ihomziak.clientmanagerservice.dao.AccountRepository;
 import com.ihomziak.clientmanagerservice.dao.ClientRepository;
 import com.ihomziak.clientmanagerservice.dto.*;
 import com.ihomziak.clientmanagerservice.dto.TransactionRequestDTO;
+import com.ihomziak.clientmanagerservice.enums.TransactionStatus;
+import com.ihomziak.clientmanagerservice.producer.TransactionEventProducer;
 import com.ihomziak.clientmanagerservice.service.AccountService;
 import com.ihomziak.clientmanagerservice.entity.Account;
 import com.ihomziak.clientmanagerservice.entity.Client;
@@ -14,6 +16,7 @@ import com.ihomziak.clientmanagerservice.exception.AccountNumberQuantityExceptio
 import com.ihomziak.clientmanagerservice.exception.ClientNotFoundException;
 import com.ihomziak.clientmanagerservice.mapper.MapStructMapper;
 import com.ihomziak.clientmanagerservice.util.AccountNumberGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -30,13 +34,15 @@ public class AccountServiceImpl implements AccountService {
     private final ClientRepository clientRepository;
     private final MapStructMapper mapper;
     private final ObjectMapper objectMapper;
+    private final TransactionEventProducer transactionEventProducer;
 
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, ClientRepository clientRepository, MapStructMapper mapper, ObjectMapper objectMapper) {
+    public AccountServiceImpl(AccountRepository accountRepository, ClientRepository clientRepository, MapStructMapper mapper, ObjectMapper objectMapper, TransactionEventProducer transactionEventProducer) {
         this.accountRepository = accountRepository;
         this.clientRepository = clientRepository;
         this.mapper = mapper;
         this.objectMapper = objectMapper;
+        this.transactionEventProducer = transactionEventProducer;
     }
 
     @Override
@@ -144,22 +150,31 @@ public class AccountServiceImpl implements AccountService {
         Optional<Account> sender = accountRepository.findAccountByUUID(transactionRequestDTO.getSenderUuid());
 
         if (sender.isEmpty()) {
-            throw new AccountNotFoundException("Sender account not found");
+            this.transactionEventProducer.sendTransactionResponse(transactionRequestDTO, "Sender account not found", TransactionStatus.FAILED, null, null);
+            return;
         }
 
         Optional<Account> receiver = accountRepository.findAccountByUUID(transactionRequestDTO.getReceiverUuid());
 
         if (receiver.isEmpty()) {
-            throw new AccountNotFoundException("Receiver account not found");
+            this.transactionEventProducer.sendTransactionResponse(transactionRequestDTO, "Receiver account not found", TransactionStatus.FAILED, null, null);
+            return;
         }
 
         Account senderAccount = sender.get();
         Account receiverAccount = receiver.get();
+
+        if (senderAccount.getBalance() < transactionRequestDTO.getAmount()) {
+            this.transactionEventProducer.sendTransactionResponse(transactionRequestDTO, "Insufficient funds", TransactionStatus.FAILED, null, null);
+            return;
+        }
 
         senderAccount.setBalance(senderAccount.getBalance() - transactionRequestDTO.getAmount());
         receiverAccount.setBalance(receiverAccount.getBalance() + transactionRequestDTO.getAmount());
 
         accountRepository.save(senderAccount);
         accountRepository.save(receiverAccount);
+
+        this.transactionEventProducer.sendTransactionResponse(transactionRequestDTO, null, TransactionStatus.COMPLETED, senderAccount.getBalance(), receiverAccount.getBalance());
     }
 }

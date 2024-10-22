@@ -1,20 +1,23 @@
 package com.ihomziak.clientmanagerservice.enums;
 
-import lombok.Getter;
-
-@Getter
 public enum TransactionStatus {
+
     NEW("NEW"),
     CREATED("CREATED"),
     STARTED("STARTED"),
     COMPLETED("COMPLETED"),
     DECLINED("DECLINED"),
-    CANCELED("CANCELED");
+    CANCELED("CANCELED"),
+    FAILED("FAILED");
 
+    private final String status;
 
-    private final String value;
+    private TransactionStatus(String status) {
+        this.status = status;
+    }
 
-    private TransactionStatus(String value) {
-        this.value = value;
+    @Override
+    public String toString() {
+        return this.status;
     }
 }
