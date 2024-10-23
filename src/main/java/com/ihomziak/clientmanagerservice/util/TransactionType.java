@@ -1,4 +1,4 @@
-package com.ihomziak.clientmanagerservice.enums;
+package com.ihomziak.clientmanagerservice.util;
 
 public enum TransactionType {
 

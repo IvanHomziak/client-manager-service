@@ -1,6 +1,6 @@
 package com.ihomziak.clientmanagerservice.dto;
 
-import com.ihomziak.clientmanagerservice.enums.AccountType;
+import com.ihomziak.clientmanagerservice.util.AccountType;
 import lombok.Setter;
 import lombok.Getter;
 

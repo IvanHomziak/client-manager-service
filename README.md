@@ -59,7 +59,7 @@ com.ihomziak.clientmanagerservice.dto: Data Transfer Objects (DTOs) for transfer
 com.ihomziak.clientmanagerservice.entity: JPA entities representing the database tables.
 com.ihomziak.clientmanagerservice.enums: Enumerations used across the application.
 com.ihomziak.clientmanagerservice.exception: Custom exceptions for handling errors.
-com.ihomziak.clientmanagerservice.util: Utility classes for various functions.
+com.ihomziak.clientmanagerservice.utils: Utility classes for various functions.
 
 ## API Endpoints
 **Account Controller**

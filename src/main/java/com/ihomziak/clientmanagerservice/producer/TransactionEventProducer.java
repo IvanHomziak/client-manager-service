@@ -6,7 +6,7 @@ import com.ihomziak.clientmanagerservice.dao.AccountRepository;
 import com.ihomziak.clientmanagerservice.dao.ClientRepository;
 import com.ihomziak.clientmanagerservice.dto.TransactionRequestDTO;
 import com.ihomziak.clientmanagerservice.dto.TransactionResponseDTO;
-import com.ihomziak.clientmanagerservice.enums.TransactionStatus;
+import com.ihomziak.clientmanagerservice.util.TransactionStatus;
 import com.ihomziak.clientmanagerservice.mapper.MapStructMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

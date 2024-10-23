@@ -5,7 +5,7 @@ import com.ihomziak.clientmanagerservice.dao.ClientRepository;
 import com.ihomziak.clientmanagerservice.dto.*;
 import com.ihomziak.clientmanagerservice.entity.Account;
 import com.ihomziak.clientmanagerservice.entity.Client;
-import com.ihomziak.clientmanagerservice.enums.AccountType;
+import com.ihomziak.clientmanagerservice.util.AccountType;
 import com.ihomziak.clientmanagerservice.exception.AccountNumberQuantityException;
 import com.ihomziak.clientmanagerservice.mapper.MapStructMapper;
 import org.junit.jupiter.api.BeforeEach;

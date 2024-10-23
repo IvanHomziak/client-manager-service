@@ -1,6 +1,6 @@
 package com.ihomziak.clientmanagerservice.entity;
 
-import com.ihomziak.clientmanagerservice.enums.AccountType;
+import com.ihomziak.clientmanagerservice.util.AccountType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

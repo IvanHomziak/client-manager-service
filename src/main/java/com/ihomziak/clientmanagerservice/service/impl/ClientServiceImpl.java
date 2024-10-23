@@ -1,7 +1,7 @@
 package com.ihomziak.clientmanagerservice.service.impl;
 
 import com.ihomziak.clientmanagerservice.dao.ClientRepository;
-import com.ihomziak.clientmanagerservice.enums.AccountType;
+import com.ihomziak.clientmanagerservice.util.AccountType;
 import com.ihomziak.clientmanagerservice.dto.ClientRequestDTO;
 import com.ihomziak.clientmanagerservice.dto.ClientResponseDTO;
 import com.ihomziak.clientmanagerservice.dto.ClientsInfoDTO;

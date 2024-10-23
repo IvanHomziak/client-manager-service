@@ -1,6 +1,6 @@
 package com.ihomziak.clientmanagerservice.dto;
 
-import com.ihomziak.clientmanagerservice.enums.TransactionStatus;
+import com.ihomziak.clientmanagerservice.util.TransactionStatus;
 import lombok.*;
 
 @Getter
